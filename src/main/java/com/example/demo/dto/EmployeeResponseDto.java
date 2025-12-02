@@ -1,6 +1,7 @@
 package com.example.demo.dto;
 
-import com.example.demo.enums.DepartmentEnum;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -11,13 +12,22 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class EmployeeResponseDto {
 
-	private int id;
+	private Integer id;
 
 	private String name;
 	private String email;
+	private String role;
 
-	private double salary;
+	private String employeeCode;
+	private String employeeStatus;
 
-	private DepartmentEnum department;
+	private Integer designationId;
+	private Integer departmentId;
 
+	private Long phoneNumber;
+	private LocalDate dob;
+	private Double salary;
+
+	private LocalDateTime createdAt;
+	private LocalDateTime updatedAt;
 }

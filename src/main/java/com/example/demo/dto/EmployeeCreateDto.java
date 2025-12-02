@@ -1,12 +1,14 @@
 package com.example.demo.dto;
 
-import com.example.demo.enums.DepartmentEnum;
+import java.time.LocalDate;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
+
+import jakarta.validation.constraints.Digits;
 import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.Max;
-import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Past;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.PositiveOrZero;
 import jakarta.validation.constraints.Size;
@@ -17,6 +19,7 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class EmployeeCreateDto {
 
 	@NotBlank(message = "Name is mandatory")
@@ -28,16 +31,29 @@ public class EmployeeCreateDto {
 	private String email;
 
 	@NotBlank(message = "Password is mandatory")
-	@Min(8)
-	@Max(30)
-	@Pattern(regexp = "^(?=.*[A-Za-z])(?=.*\\\\d)(?=.*[@$!%*#?&])[A-Za-z\\\\d@$!%*#?&]{8,}$", message = "Password "
-			+ "must contain at least 8 characters, including 1 letter, 1 number, and 1 special character")
+	@Pattern(regexp = "^(?=.*[A-Za-z])(?=.*\\d)(?=.*[@$!%*#?&])[A-Za-z\\d@$!%*#?&]{8,30}$", message = ""
+			+ "Password must contain at least 8 characters, including 1 letter, 1 number, and 1 special character")
 	private String password;
 
-	@PositiveOrZero(message = "Salary must be non-negative")
-	private double salary;
+	// Role is optional (managed later by auth service)
+	private String role;
 
-	@NotNull(message = "Department is mandatory")
-	private DepartmentEnum department;
+	@NotNull(message = "Date of birth is mandatory")
+	@Past(message = "DOB must be a past date")
+	private LocalDate dob;
+
+	@NotNull(message = "Designation ID is mandatory")
+	private Integer designationId;
+
+	@NotNull(message = "Department ID is mandatory")
+	private Integer departmentId;
+
+	@NotNull(message = "Phone number is mandatory")
+	@Digits(integer = 10, fraction = 0, message = "Phone number must be exactly 10 digits")
+	private Long phoneNumber;
+
+	@NotNull(message = "Salary is mandatory")
+	@PositiveOrZero(message = "Salary must be non-negative")
+	private Double salary;
 
 }

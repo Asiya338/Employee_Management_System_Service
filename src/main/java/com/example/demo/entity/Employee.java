@@ -1,7 +1,11 @@
 package com.example.demo.entity;
 
-import com.example.demo.enums.DepartmentEnum;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 
+import com.example.demo.enums.EmpStatusEnum;
+
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
@@ -9,21 +13,60 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import lombok.Data;
 
+@Data
 @Entity
 @Table(name = "employees")
 public class Employee {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private int id;
+	private Integer id;
 
+	@Column(nullable = false)
 	private String name;
+
+	@Column(name = "employee_code", unique = true, nullable = false)
+	private String employeeCode;
+
+	@Column(unique = true, nullable = false)
 	private String email;
+
+	@Column(nullable = false)
 	private String password;
 
-	private double salary;
+	private String role;
+
+	private LocalDate dob;
+
+	@Column(name = "designation_id")
+	private Integer designationId;
+
+	@Column(name = "department_id")
+	private Integer departmentId;
+
+	@Column(name = "phone_number")
+	private Long phoneNumber;
+
+	private Double salary;
+
+	@Column(name = "joined_at")
+	private LocalDateTime joinedAt;
+
+	@Column(name = "created_at", insertable = false, updatable = false)
+	private LocalDateTime createdAt;
+
+	@Column(name = "updated_at", insertable = false)
+	private LocalDateTime updatedAt;
+
+	@Column(name = "created_by")
+	private String createdBy;
+
+	@Column(name = "updated_by")
+	private String updatedBy;
 
 	@Enumerated(EnumType.STRING)
-	private DepartmentEnum department;
+	@Column(name = "employee_status")
+	private EmpStatusEnum employeeStatus = EmpStatusEnum.ACTIVE;
 }

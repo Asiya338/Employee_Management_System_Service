@@ -1,6 +1,0 @@
---CREATE TABLE dev (
-  --  id INT PRIMARY KEY AUTO_INCREMENT,
-    --userName VARCHAR(50),
-   -- skill VARCHAR(40),
-    --experience INT
---);
