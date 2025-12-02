@@ -3,10 +3,12 @@ package com.example.demo.service;
 import java.util.List;
 
 import org.springframework.data.domain.Page;
+import org.springframework.stereotype.Service;
 
 import com.example.demo.dto.EmployeeCreateDto;
 import com.example.demo.dto.EmployeeResponseDto;
 
+@Service
 public interface EmployeeService {
 
 	EmployeeResponseDto createEmployee(EmployeeCreateDto employee);
@@ -26,5 +28,7 @@ public interface EmployeeService {
 	List<EmployeeResponseDto> getAllEmployeesByRole(String roleName);
 
 	List<EmployeeResponseDto> getAllEmployeesByStatus(String status);
+
+	List<EmployeeResponseDto> searchEmployees(String name, String email, String employeeCode);
 
 }

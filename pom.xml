@@ -9,7 +9,7 @@
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>com.myprojects.spring</groupId>
-	<artifactId>SpringJDBC</artifactId>
+	<artifactId>employee-management-system</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>SimpleSpring</name>
 	<description>Demo project for Spring Boot</description>
@@ -29,6 +29,7 @@
 	<properties>
 		<java.version>17</java.version>
 	</properties>
+	
 	<dependencies>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
@@ -41,11 +42,13 @@
 			<scope>runtime</scope>
 			<optional>true</optional>
 		</dependency>
+		
 		<dependency>
 			<groupId>org.projectlombok</groupId>
 			<artifactId>lombok</artifactId>
 			<optional>true</optional>
 		</dependency>
+		
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-test</artifactId>
@@ -79,7 +82,28 @@
     			<scope>runtime</scope>
 		</dependency>
 		
+		<dependency>
+		    <groupId>org.modelmapper</groupId>
+		    <artifactId>modelmapper</artifactId>
+		    <version>3.1.1</version>
+		</dependency>
+		
 	</dependencies>
+	
+	<profiles>
+		<profile>
+			<id>local</id>
+			<activation>
+				<activeByDefault>true</activeByDefault>
+			</activation>
+			<properties>
+				<spring.profiles.active>local</spring.profiles.active>
+				<logging.path>
+					D:\\SpringWebProj\\logs\\employee-management-system
+				</logging.path>
+			</properties>
+		</profile>
+	</profiles>
 
 	<build>
 		<plugins>

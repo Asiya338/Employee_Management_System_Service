@@ -114,6 +114,15 @@ public class EmployeeController {
 		return ResponseEntity.status(HttpStatus.OK).body(employees);
 	}
 
+	@GetMapping("/search")
+	public ResponseEntity<List<EmployeeResponseDto>> searchEmployees(@RequestParam(required = false) String name,
+			@RequestParam(required = false) String email, @RequestParam(required = false) String employeeCode) {
+
+		List<EmployeeResponseDto> employees = employeeService.searchEmployees(name, email, employeeCode);
+
+		return ResponseEntity.ok(employees);
+	}
+
 	@PutMapping("/{empId}")
 	public ResponseEntity<EmployeeResponseDto> updateEmployee(@Valid @RequestBody EmployeeUpdateDto empDto,
 			@PathVariable int empId) {
