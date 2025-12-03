@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 import com.example.demo.dto.EmployeeCreateDto;
 import com.example.demo.dto.EmployeeResponseDto;
 import com.example.demo.entity.Employee;
+import com.example.demo.enums.EmpStatusEnum;
 import com.example.demo.repo.EmployeeRepo;
 import com.example.demo.service.EmployeeService;
 
@@ -140,8 +141,24 @@ public class EmployeeServiceImpl implements EmployeeService {
 
 	@Override
 	public List<EmployeeResponseDto> getAllEmployeesByStatus(String status) {
-		// TODO Auto-generated method stub
-		return null;
+		log.info("Get all employees by employee status: {}", status);
+
+		EmpStatusEnum enumStatus;
+		try {
+			enumStatus = EmpStatusEnum.valueOf(status.toUpperCase());
+		} catch (IllegalArgumentException e) {
+			throw new RuntimeException("Invalid status. Allowed values: ACTIVE, INACTIVE, TERMINATED");
+		}
+
+		List<Employee> employees = employeeRepo.findByEmployeeStatus(enumStatus);
+
+		List<EmployeeResponseDto> responseDto = employees.stream()
+				.map(employee -> modelMapper.map(employee, EmployeeResponseDto.class)).toList();
+
+		log.info("Employees by status : {} , {}", status, responseDto);
+
+		return responseDto;
+
 	}
 
 	@Override
