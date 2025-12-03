@@ -54,6 +54,8 @@ public class EmployeeServiceImpl implements EmployeeService {
 
 	@Override
 	public Page<EmployeeResponseDto> getAllEmployees(int page, int size, String sortBy, String order) {
+		log.info("get all employees on page:{}, size:{}, sortBy:{}, order:{}", page, size, sortBy, order);
+
 		Sort.Direction direction = order.equalsIgnoreCase("desc") ? Sort.Direction.DESC : Sort.Direction.ASC;
 
 		Pageable pageable = PageRequest.of(page, size, Sort.by(direction, sortBy));
@@ -62,19 +64,36 @@ public class EmployeeServiceImpl implements EmployeeService {
 
 		Page<EmployeeResponseDto> response = employeePage
 				.map(employee -> modelMapper.map(employee, EmployeeResponseDto.class));
+
+		log.info("All employees || getAllEmployees : {} ", response);
+
 		return response;
 	}
 
 	@Override
 	public EmployeeResponseDto getEmployeeById(int empId) {
-		// TODO Auto-generated method stub
-		return null;
+		log.info("Employee with id : {} ", empId);
+
+		Employee empById = employeeRepo.findById(empId).orElseThrow(null);
+
+		EmployeeResponseDto response = modelMapper.map(empById, EmployeeResponseDto.class);
+
+		log.info("Employee details with id : {} ", empId);
+
+		return response;
+
 	}
 
 	@Override
 	public String deleteEmployeeById(int empId) {
-		// TODO Auto-generated method stub
-		return null;
+		log.info("Deleting Employee with id : {} ", empId);
+
+		employeeRepo.deleteById(empId);
+
+		log.info("deleted Employee with id : {} ", empId);
+
+		return "Deleted Successfuly";
+
 	}
 
 	@Override
