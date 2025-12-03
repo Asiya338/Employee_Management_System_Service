@@ -125,9 +125,17 @@ public class EmployeeServiceImpl implements EmployeeService {
 	}
 
 	@Override
-	public List<EmployeeResponseDto> getAllEmployeesByRole(String roleName) {
-		// TODO Auto-generated method stub
-		return null;
+	public List<EmployeeResponseDto> getAllEmployeesByRole(String role) {
+		log.info("Get all employees by role: {}", role);
+
+		List<Employee> employees = employeeRepo.findByRole(role);
+
+		List<EmployeeResponseDto> responseDto = employees.stream()
+				.map(employee -> modelMapper.map(employee, EmployeeResponseDto.class)).toList();
+
+		log.info("Employees by role : {} , {}", role, responseDto);
+
+		return responseDto;
 	}
 
 	@Override

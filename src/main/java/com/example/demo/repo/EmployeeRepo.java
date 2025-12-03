@@ -13,4 +13,6 @@ public interface EmployeeRepo extends JpaRepository<Employee, Integer> {
 	List<Employee> findByDepartmentId(Integer departmentId);
 
 	List<Employee> findByDesignationId(Integer designationId);
+
+	List<Employee> findByRole(String role);
 }
