@@ -97,15 +97,17 @@ public class EmployeeServiceImpl implements EmployeeService {
 	}
 
 	@Override
-	public EmployeeResponseDto updateEmployeeById(int empId) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
 	public List<EmployeeResponseDto> getAllEmployeesByDepId(int depId) {
-		// TODO Auto-generated method stub
-		return null;
+		log.info("Get all employees from department : {}", depId);
+
+		List<Employee> employees = employeeRepo.findByDepartmentId(depId);
+
+		List<EmployeeResponseDto> responseDto = employees.stream()
+				.map(employee -> modelMapper.map(employee, EmployeeResponseDto.class)).toList();
+
+		log.info("Employees from department : {} , {}", depId, responseDto);
+
+		return responseDto;
 	}
 
 	@Override
@@ -128,6 +130,12 @@ public class EmployeeServiceImpl implements EmployeeService {
 
 	@Override
 	public List<EmployeeResponseDto> searchEmployees(String name, String email, String employeeCode) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public EmployeeResponseDto updateEmployeeById(int empId) {
 		// TODO Auto-generated method stub
 		return null;
 	}
