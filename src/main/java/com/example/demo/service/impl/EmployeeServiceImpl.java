@@ -5,7 +5,9 @@ import java.util.List;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
-import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import com.example.demo.dto.EmployeeCreateDto;
@@ -24,7 +26,6 @@ public class EmployeeServiceImpl implements EmployeeService {
 
 	private final EmployeeRepo employeeRepo;
 	private final ModelMapper modelMapper;
-	private final PasswordEncoder passwordEncoder;
 
 	@Override
 	public EmployeeResponseDto createEmployee(EmployeeCreateDto employeeDto) {
@@ -32,11 +33,10 @@ public class EmployeeServiceImpl implements EmployeeService {
 
 		Employee employee = modelMapper.map(employeeDto, Employee.class);
 
-		employee.setPassword(passwordEncoder.encode(employeeDto.getPassword()));
 		employee.setCreatedAt(LocalDateTime.now());
 		employee.setJoinedAt(LocalDateTime.now());
 		employee.setUpdatedAt(LocalDateTime.now());
-		employee.setEmployeeCode("emp");
+		employee.setEmployeeCode("em67p");
 
 		employeeRepo.save(employee);
 
@@ -54,8 +54,15 @@ public class EmployeeServiceImpl implements EmployeeService {
 
 	@Override
 	public Page<EmployeeResponseDto> getAllEmployees(int page, int size, String sortBy, String order) {
-		// TODO Auto-generated method stub
-		return null;
+		Sort.Direction direction = order.equalsIgnoreCase("desc") ? Sort.Direction.DESC : Sort.Direction.ASC;
+
+		Pageable pageable = PageRequest.of(page, size, Sort.by(direction, sortBy));
+
+		Page<Employee> employeePage = employeeRepo.findAll(pageable);
+
+		Page<EmployeeResponseDto> response = employeePage
+				.map(employee -> modelMapper.map(employee, EmployeeResponseDto.class));
+		return response;
 	}
 
 	@Override

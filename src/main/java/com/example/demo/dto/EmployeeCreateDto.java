@@ -9,7 +9,6 @@ import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Past;
-import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.PositiveOrZero;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
@@ -29,11 +28,6 @@ public class EmployeeCreateDto {
 	@NotBlank(message = "Email is mandatory")
 	@Email(message = "Email should be valid")
 	private String email;
-
-	@NotBlank(message = "Password is mandatory")
-	@Pattern(regexp = "^(?=.*[A-Za-z])(?=.*\\d)(?=.*[@$!%*#?&])[A-Za-z\\d@$!%*#?&]{8,30}$", message = ""
-			+ "Password must contain at least 8 characters, including 1 letter, 1 number, and 1 special character")
-	private String password;
 
 	// Role is optional (managed later by auth service)
 	private String role;
