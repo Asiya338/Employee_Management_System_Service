@@ -112,8 +112,16 @@ public class EmployeeServiceImpl implements EmployeeService {
 
 	@Override
 	public List<EmployeeResponseDto> getAllEmployeesByDsgnId(int dsgnId) {
-		// TODO Auto-generated method stub
-		return null;
+		log.info("Get all employees from designation : {}", dsgnId);
+
+		List<Employee> employees = employeeRepo.findByDesignationId(dsgnId);
+
+		List<EmployeeResponseDto> responseDto = employees.stream()
+				.map(employee -> modelMapper.map(employee, EmployeeResponseDto.class)).toList();
+
+		log.info("Employees from designation : {} , {}", dsgnId, responseDto);
+
+		return responseDto;
 	}
 
 	@Override
