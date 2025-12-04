@@ -1,0 +1,31 @@
+package com.example.demo.enums;
+
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+
+@Getter
+@NoArgsConstructor
+public enum ErrorCodeEnum {
+
+	GENERIC_EXCEPTION("10001", "Unexpected error in Employee Management System service.."),
+	RESOURCE_NOT_FOUND("10002", "Resource not found ..."),
+//	BAD_REQUEST("10003", "Bad " + "Request, try with valid details"),
+	DUPLICATE_EMAIL("10004", "" + "Email already exists.."),
+	METHOD_ARGUMENT_INVALID("10005", "Method Argument Not Valid Exception"),
+	HTTP_MESSAGE_NOT_READABLE_EXCEPTION("10006",
+			"Http Message Not Readable Exception. " + "Enter input in valid format"),
+	DATA_INTEGRITY_VIOLATION_EXCEPTION("10007",
+			"Data Integrity Violation Exception. Must follow referencial integrity with master table.."),
+	ILLEGAL_ARGUMENT_EXCEPTION("10008", "Illegal Argument Exception "),
+	PROPERTY_REFERENCE_EXCEPTION("10009", "Property Reference Exception"),
+	INVALID_PAGE("100010", "Page must not be negative... "), INVALID_SIZE("100011", "Size must be positive... "),
+	INVALID_SORT_BY("10012", "Could not Sort by given field. Please " + "enter valid sortBy field..  ");
+
+	String errorCode;
+	String errorMessage;
+
+	ErrorCodeEnum(String errorCode, String errorMessage) {
+		this.errorCode = errorCode;
+		this.errorMessage = errorMessage;
+	}
+}

@@ -16,6 +16,8 @@ import com.example.demo.dto.EmployeeResponseDto;
 import com.example.demo.dto.EmployeeUpdateDto;
 import com.example.demo.entity.Employee;
 import com.example.demo.enums.EmpStatusEnum;
+import com.example.demo.enums.ErrorCodeEnum;
+import com.example.demo.exception.BadRequestException;
 import com.example.demo.exception.DuplicateResourceException;
 import com.example.demo.repo.EmployeeRepo;
 import com.example.demo.service.EmployeeService;
@@ -31,12 +33,16 @@ public class EmployeeServiceImpl implements EmployeeService {
 	private final EmployeeRepo employeeRepo;
 	private final ModelMapper modelMapper;
 
+	private static final List<String> ALLOWED_SORT_FIELDS = List.of("id", "name", "email", "designationId",
+			"departmentId", "salary", "dob", "createdAt", "updatedAt", "joinedAt");
+
 	@Override
 	public EmployeeResponseDto createEmployee(EmployeeCreateDto employeeDto) {
 		log.info("Employee DTO || createEmployee : {} ", employeeDto);
 
 		if (employeeRepo.findByEmail(employeeDto.getEmail()) != null) {
-			throw new DuplicateResourceException("10002", "Email already exists");
+			throw new DuplicateResourceException(ErrorCodeEnum.DUPLICATE_EMAIL.getErrorCode(),
+					ErrorCodeEnum.DUPLICATE_EMAIL.getErrorMessage());
 		}
 
 		Employee employee = modelMapper.map(employeeDto, Employee.class);
@@ -61,6 +67,17 @@ public class EmployeeServiceImpl implements EmployeeService {
 	@Override
 	public Page<EmployeeResponseDto> getAllEmployees(int page, int size, String sortBy, String order) {
 		log.info("get all employees on page:{}, size:{}, sortBy:{}, order:{}", page, size, sortBy, order);
+
+		if (page < 0) {
+			throw new BadRequestException(ErrorCodeEnum.INVALID_PAGE.getErrorCode(),
+					ErrorCodeEnum.INVALID_PAGE.getErrorMessage());
+		} else if (size <= 0) {
+			throw new BadRequestException(ErrorCodeEnum.INVALID_SIZE.getErrorCode(),
+					ErrorCodeEnum.INVALID_SIZE.getErrorMessage());
+		} else if (!ALLOWED_SORT_FIELDS.contains(sortBy)) {
+			throw new BadRequestException(ErrorCodeEnum.INVALID_SORT_BY.getErrorCode(),
+					ErrorCodeEnum.INVALID_SORT_BY.getErrorMessage() + ": " + sortBy);
+		}
 
 		Sort.Direction direction = order.equalsIgnoreCase("desc") ? Sort.Direction.DESC : Sort.Direction.ASC;
 
