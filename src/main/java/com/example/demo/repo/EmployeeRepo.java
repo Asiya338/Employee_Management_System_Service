@@ -18,4 +18,10 @@ public interface EmployeeRepo extends JpaRepository<Employee, Integer> {
 	List<Employee> findByRole(String role);
 
 	List<Employee> findByEmployeeStatus(EmpStatusEnum enumStatus);
+
+	Employee findByEmployeeCode(String employeeCode);
+
+	Employee findByEmail(String email);
+
+	List<Employee> findByNameContainingIgnoreCase(String name);
 }

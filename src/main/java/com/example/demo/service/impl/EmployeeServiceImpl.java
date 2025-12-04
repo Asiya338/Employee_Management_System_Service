@@ -163,8 +163,37 @@ public class EmployeeServiceImpl implements EmployeeService {
 
 	@Override
 	public List<EmployeeResponseDto> searchEmployees(String name, String email, String employeeCode) {
-		// TODO Auto-generated method stub
-		return null;
+		log.info("Searching employee/s based on employeeCode : {} , or email : {} , or name : {} ...", employeeCode,
+				email, name);
+
+		if (employeeCode != null) {
+			Employee employee = employeeRepo.findByEmployeeCode(employeeCode);
+			if (employee != null) {
+				log.info("Employee with employeeCode: {}  ", employeeCode);
+
+				return List.of(modelMapper.map(employee, EmployeeResponseDto.class));
+			}
+		} else if (email != null) {
+			Employee employee = employeeRepo.findByEmail(email);
+			if (employee != null) {
+				log.info("Employee with email: {}  ", email);
+
+				return List.of(modelMapper.map(employee, EmployeeResponseDto.class));
+			}
+		} else if (name != null) {
+			List<Employee> employees = employeeRepo.findByNameContainingIgnoreCase(name);
+			if (employees.size() >= 0) {
+				log.info("there are {} Employee with name: {}  ", employees.size(), name);
+
+				List<EmployeeResponseDto> response = employees.stream()
+						.map(employee -> modelMapper.map(employee, EmployeeResponseDto.class)).toList();
+				return response;
+			}
+		}
+		log.info("There are no such employees with given employeeCode : {}  |  email : {}  |  name : {}  ",
+				employeeCode, email, name);
+
+		return List.of();
 	}
 
 	@Override
