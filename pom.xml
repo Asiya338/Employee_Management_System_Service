@@ -83,6 +83,17 @@
 		</dependency>
 		
 		<dependency>
+		    <groupId>io.micrometer</groupId>
+		    <artifactId>micrometer-tracing</artifactId>
+		</dependency>
+		
+		<!-- Bridge to export traceId to logs using Logback + MDC -->
+		<dependency>
+		    <groupId>io.micrometer</groupId>
+		    <artifactId>micrometer-tracing-bridge-brave</artifactId>
+		</dependency>		
+			
+		<dependency>
 		    <groupId>org.modelmapper</groupId>
 		    <artifactId>modelmapper</artifactId>
 		    <version>3.1.1</version>

@@ -1,5 +1,8 @@
 package com.example.demo.exception;
 
+import lombok.Data;
+
+@Data
 public class ResourceNotFoundException extends RuntimeException {
 	private String errorCode;
 	private String errorMessage;

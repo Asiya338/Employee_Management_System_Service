@@ -8,4 +8,7 @@ public class Constant {
 	public static final String dummyEmpCode = "EMP";
 
 	public static final String formatEmpCode = "EMP%05d";
+
+	public static final String traceId = "traceId";
+
 }
