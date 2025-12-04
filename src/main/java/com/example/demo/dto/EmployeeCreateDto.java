@@ -2,9 +2,11 @@ package com.example.demo.dto;
 
 import java.time.LocalDate;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonInclude;
 
 import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Past;
@@ -22,7 +24,7 @@ import lombok.NoArgsConstructor;
 public class EmployeeCreateDto {
 
 	@NotBlank(message = "Name is mandatory")
-	@Size(min = 2, max = 30, message = "Name must be between 2 and 30 characters")
+	@Size(min = 3, max = 30, message = "Name must be between 2 and 30 characters")
 	private String name;
 
 	@NotBlank(message = "Email is mandatory")
@@ -33,6 +35,7 @@ public class EmployeeCreateDto {
 	private String role;
 
 	@NotNull(message = "Date of birth is mandatory")
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
 	@Past(message = "DOB must be a past date")
 	private LocalDate dob;
 
@@ -48,6 +51,7 @@ public class EmployeeCreateDto {
 
 	@NotNull(message = "Salary is mandatory")
 	@PositiveOrZero(message = "Salary must be non-negative")
+	@Min(10000)
 	private Double salary;
 
 }

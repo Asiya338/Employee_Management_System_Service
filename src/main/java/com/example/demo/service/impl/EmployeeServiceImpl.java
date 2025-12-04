@@ -16,6 +16,7 @@ import com.example.demo.dto.EmployeeResponseDto;
 import com.example.demo.dto.EmployeeUpdateDto;
 import com.example.demo.entity.Employee;
 import com.example.demo.enums.EmpStatusEnum;
+import com.example.demo.exception.DuplicateResourceException;
 import com.example.demo.repo.EmployeeRepo;
 import com.example.demo.service.EmployeeService;
 
@@ -33,6 +34,10 @@ public class EmployeeServiceImpl implements EmployeeService {
 	@Override
 	public EmployeeResponseDto createEmployee(EmployeeCreateDto employeeDto) {
 		log.info("Employee DTO || createEmployee : {} ", employeeDto);
+
+		if (employeeRepo.findByEmail(employeeDto.getEmail()) != null) {
+			throw new DuplicateResourceException("10002", "Email already exists");
+		}
 
 		Employee employee = modelMapper.map(employeeDto, Employee.class);
 

@@ -2,8 +2,6 @@ package com.example.demo.exception;
 
 import java.time.LocalDateTime;
 
-import org.springframework.http.HttpMethod;
-
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -20,5 +18,5 @@ public class ErrorResponse {
 
 	private LocalDateTime timeStamp;
 
-	private HttpMethod httpMethod;
+	private String httpMethod;
 }
