@@ -44,7 +44,7 @@ public class Employee {
 	private Integer departmentId;
 
 	@Column(name = "phone_number")
-	private Long phoneNumber;
+	private String phoneNumber;
 
 	private Double salary;
 

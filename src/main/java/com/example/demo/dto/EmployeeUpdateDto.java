@@ -5,8 +5,8 @@ import java.time.LocalDate;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 
-import jakarta.validation.constraints.Digits;
 import jakarta.validation.constraints.Past;
+import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.PositiveOrZero;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
@@ -30,8 +30,8 @@ public class EmployeeUpdateDto {
 
 	private Integer departmentId;
 
-	@Digits(integer = 10, fraction = 0, message = "Phone number must be exactly 10 digits")
-	private Long phoneNumber;
+	@Pattern(regexp = "^[1-9]\\d{9}$", message = "Phone number must be exactly 10 digits")
+	private String phoneNumber;
 
 	@PositiveOrZero(message = "Salary must be non-negative")
 	private Double salary;

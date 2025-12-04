@@ -4,11 +4,11 @@ import java.time.LocalDate;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 
-import jakarta.validation.constraints.Digits;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Past;
+import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.PositiveOrZero;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
@@ -43,8 +43,8 @@ public class EmployeeCreateDto {
 	private Integer departmentId;
 
 	@NotNull(message = "Phone number is mandatory")
-	@Digits(integer = 10, fraction = 0, message = "Phone number must be exactly 10 digits")
-	private Long phoneNumber;
+	@Pattern(regexp = "^[1-9]\\d{9}$", message = "Phone number must be exactly 10 digits")
+	private String phoneNumber;
 
 	@NotNull(message = "Salary is mandatory")
 	@PositiveOrZero(message = "Salary must be non-negative")

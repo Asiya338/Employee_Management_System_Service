@@ -126,7 +126,7 @@ public class EmployeeController {
 	@PutMapping("/{empId}")
 	public ResponseEntity<EmployeeResponseDto> updateEmployee(@Valid @RequestBody EmployeeUpdateDto empDto,
 			@PathVariable int empId) {
-		log.info("Updating employee details with emp id : {} ", empId);
+		log.info("Updating employee details with emp id : {} | {}", empId, empDto);
 
 		EmployeeResponseDto updatedEmployee = employeeService.updateEmployeeById(empId, empDto);
 

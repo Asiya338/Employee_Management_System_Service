@@ -10,6 +10,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import com.example.demo.constants.Constant;
 import com.example.demo.dto.EmployeeCreateDto;
 import com.example.demo.dto.EmployeeResponseDto;
 import com.example.demo.dto.EmployeeUpdateDto;
@@ -38,12 +39,10 @@ public class EmployeeServiceImpl implements EmployeeService {
 		employee.setCreatedAt(LocalDateTime.now());
 		employee.setJoinedAt(LocalDateTime.now());
 		employee.setUpdatedAt(LocalDateTime.now());
-		employee.setEmployeeCode("em67p");
-
-		employeeRepo.save(employee);
+		employee.setEmployeeCode(Constant.dummyEmpCode);
 
 		Employee savedEmployee = employeeRepo.save(employee);
-		String empCode = String.format("EMP%05d", savedEmployee.getId());
+		String empCode = String.format(Constant.formatEmpCode, savedEmployee.getId());
 		savedEmployee.setEmployeeCode(empCode);
 
 		employee = employeeRepo.save(savedEmployee);
@@ -183,7 +182,7 @@ public class EmployeeServiceImpl implements EmployeeService {
 			}
 		} else if (name != null) {
 			List<Employee> employees = employeeRepo.findByNameContainingIgnoreCase(name);
-			if (employees.size() >= 0) {
+			if (!employees.isEmpty()) {
 				log.info("there are {} Employee with name: {}  ", employees.size(), name);
 
 				List<EmployeeResponseDto> response = employees.stream()
@@ -199,7 +198,7 @@ public class EmployeeServiceImpl implements EmployeeService {
 
 	@Override
 	public EmployeeResponseDto updateEmployeeById(int empId, EmployeeUpdateDto empDto) {
-		log.info("Updating employee with employee id: {} ", empId);
+		log.info("Updating employee with employee id: {} | employee update dto : {} ", empId, empDto);
 
 		Employee employee = employeeRepo.findById(empId).orElse(null);
 
