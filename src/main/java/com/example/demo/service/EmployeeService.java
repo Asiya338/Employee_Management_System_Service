@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 
 import com.example.demo.dto.EmployeeCreateDto;
 import com.example.demo.dto.EmployeeResponseDto;
+import com.example.demo.dto.EmployeeUpdateDto;
 
 @Service
 public interface EmployeeService {
@@ -19,7 +20,7 @@ public interface EmployeeService {
 
 	String deleteEmployeeById(int empId);
 
-	EmployeeResponseDto updateEmployeeById(int empId);
+	EmployeeResponseDto updateEmployeeById(int empId, EmployeeUpdateDto empDto);
 
 	List<EmployeeResponseDto> getAllEmployeesByDepId(int depId);
 

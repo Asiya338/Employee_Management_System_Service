@@ -128,7 +128,7 @@ public class EmployeeController {
 			@PathVariable int empId) {
 		log.info("Updating employee details with emp id : {} ", empId);
 
-		EmployeeResponseDto updatedEmployee = employeeService.updateEmployeeById(empId);
+		EmployeeResponseDto updatedEmployee = employeeService.updateEmployeeById(empId, empDto);
 
 		log.info("Updated Employee with employee id : {}, {}  ", empId, updatedEmployee);
 

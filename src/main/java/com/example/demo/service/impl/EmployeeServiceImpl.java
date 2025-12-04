@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 
 import com.example.demo.dto.EmployeeCreateDto;
 import com.example.demo.dto.EmployeeResponseDto;
+import com.example.demo.dto.EmployeeUpdateDto;
 import com.example.demo.entity.Employee;
 import com.example.demo.enums.EmpStatusEnum;
 import com.example.demo.repo.EmployeeRepo;
@@ -197,9 +198,27 @@ public class EmployeeServiceImpl implements EmployeeService {
 	}
 
 	@Override
-	public EmployeeResponseDto updateEmployeeById(int empId) {
-		// TODO Auto-generated method stub
-		return null;
+	public EmployeeResponseDto updateEmployeeById(int empId, EmployeeUpdateDto empDto) {
+		log.info("Updating employee with employee id: {} ", empId);
+
+		Employee employee = employeeRepo.findById(empId).orElse(null);
+
+		if (employee == null) {
+			log.info("Employee not found with employee id : {} ", empId);
+
+			return null;
+		}
+
+		modelMapper.map(empDto, employee);
+
+		employee.setUpdatedAt(LocalDateTime.now());
+		Employee savedEmployee = employeeRepo.save(employee);
+
+		EmployeeResponseDto response = modelMapper.map(savedEmployee, EmployeeResponseDto.class);
+
+		log.info("Employee updated with id {} | employee :  {} ", empId, response);
+
+		return response;
 	}
 
 }
