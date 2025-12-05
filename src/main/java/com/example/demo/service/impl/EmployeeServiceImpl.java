@@ -35,13 +35,6 @@ public class EmployeeServiceImpl implements EmployeeService {
 	private final EmployeeRepo employeeRepo;
 	private final ModelMapper modelMapper;
 
-	private static final List<String> ALLOWED_SORT_FIELDS = List.of("id", "name", "email", "designationId",
-			"departmentId", "salary", "dob", "createdAt", "updatedAt", "joinedAt");
-
-	private static final List<Integer> ALLOWED_DEPT_ID = List.of(1, 2, 3, 4, 5);
-
-	private static final List<Integer> ALLOWED_DSGN_ID = List.of(1, 2, 3, 4, 5, 6);
-
 	@Override
 	public EmployeeResponseDto createEmployee(EmployeeCreateDto employeeDto) {
 		log.info("Employee Create DTO : {} ", employeeDto);
@@ -80,7 +73,7 @@ public class EmployeeServiceImpl implements EmployeeService {
 		} else if (size <= 0) {
 			throw new BadRequestException(ErrorCodeEnum.INVALID_SIZE.getErrorCode(),
 					ErrorCodeEnum.INVALID_SIZE.getErrorMessage());
-		} else if (!ALLOWED_SORT_FIELDS.contains(sortBy)) {
+		} else if (!Constant.ALLOWED_SORT_FIELDS.contains(sortBy)) {
 			throw new BadRequestException(ErrorCodeEnum.INVALID_SORT_BY.getErrorCode(),
 					ErrorCodeEnum.INVALID_SORT_BY.getErrorMessage() + ": " + sortBy);
 		}
@@ -136,9 +129,9 @@ public class EmployeeServiceImpl implements EmployeeService {
 	public List<EmployeeResponseDto> getAllEmployeesByDepId(int depId) {
 		log.info("Get all employees from department : {}", depId);
 
-		if (!ALLOWED_DEPT_ID.contains(depId)) {
+		if (!Constant.ALLOWED_DEPT_ID.contains(depId)) {
 			throw new BadRequestException(ErrorCodeEnum.INVALID_DEPT_ID.getErrorCode(),
-					ErrorCodeEnum.INVALID_DEPT_ID.getErrorMessage() + " Allowed values: " + ALLOWED_DEPT_ID);
+					ErrorCodeEnum.INVALID_DEPT_ID.getErrorMessage() + " Allowed values: " + Constant.ALLOWED_DEPT_ID);
 		}
 
 		List<Employee> employees = employeeRepo.findByDepartmentId(depId);
@@ -155,9 +148,9 @@ public class EmployeeServiceImpl implements EmployeeService {
 	public List<EmployeeResponseDto> getAllEmployeesByDsgnId(int dsgnId) {
 		log.info("Get all employees from designation : {}", dsgnId);
 
-		if (!ALLOWED_DSGN_ID.contains(dsgnId)) {
+		if (!Constant.ALLOWED_DSGN_ID.contains(dsgnId)) {
 			throw new BadRequestException(ErrorCodeEnum.INVALID_DSGN_ID.getErrorCode(),
-					ErrorCodeEnum.INVALID_DSGN_ID.getErrorMessage() + " Allowed values: " + ALLOWED_DSGN_ID);
+					ErrorCodeEnum.INVALID_DSGN_ID.getErrorMessage() + " Allowed values: " + Constant.ALLOWED_DSGN_ID);
 		}
 
 		List<Employee> employees = employeeRepo.findByDesignationId(dsgnId);
