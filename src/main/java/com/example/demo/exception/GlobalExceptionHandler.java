@@ -134,7 +134,7 @@ public class GlobalExceptionHandler {
 		return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
 	}
 
-	@ExceptionHandler(Exception.class)
+//	@ExceptionHandler(Exception.class)
 	public ResponseEntity<ErrorResponse> genericException(Exception ex, HttpServletRequest req) {
 		log.info("Application Exception occured : {} ", ex.getMessage(), ex);
 

@@ -44,7 +44,7 @@ public class EmployeeServiceImpl implements EmployeeService {
 
 	@Override
 	public EmployeeResponseDto createEmployee(EmployeeCreateDto employeeDto) {
-		log.info("Employee DTO || createEmployee : {} ", employeeDto);
+		log.info("Employee Create DTO : {} ", employeeDto);
 
 		if (employeeRepo.findByEmail(employeeDto.getEmail()) != null) {
 			throw new DuplicateResourceException(ErrorCodeEnum.DUPLICATE_EMAIL.getErrorCode(),
@@ -192,7 +192,8 @@ public class EmployeeServiceImpl implements EmployeeService {
 		try {
 			enumStatus = EmpStatusEnum.valueOf(status.toUpperCase());
 		} catch (IllegalArgumentException e) {
-			throw new RuntimeException("Invalid status. Allowed values: ACTIVE, INACTIVE, TERMINATED");
+			throw new BadRequestException(ErrorCodeEnum.INVALID_STATUS.getErrorCode(),
+					ErrorCodeEnum.INVALID_STATUS.getErrorMessage());
 		}
 
 		List<Employee> employees = employeeRepo.findByEmployeeStatus(enumStatus);
@@ -203,7 +204,6 @@ public class EmployeeServiceImpl implements EmployeeService {
 		log.info("Employees by status : {} , {}", status, responseDto);
 
 		return responseDto;
-
 	}
 
 	@Override
@@ -245,13 +245,10 @@ public class EmployeeServiceImpl implements EmployeeService {
 	public EmployeeResponseDto updateEmployeeById(int empId, EmployeeUpdateDto empDto) {
 		log.info("Updating employee with employee id: {} | employee update dto : {} ", empId, empDto);
 
-		Employee employee = employeeRepo.findById(empId).orElse(null);
-
-		if (employee == null) {
-			log.info("Employee not found with employee id : {} ", empId);
-
-			return null;
-		}
+		Employee employee = employeeRepo.findById(empId).orElseThrow(
+				() -> new ResourceNotFoundException(ErrorCodeEnum.RESOURCE_WITH_ID__NOT_FOUND.getErrorCode(),
+						ErrorCodeEnum.RESOURCE_WITH_ID__NOT_FOUND.getErrorMessage()
+								+ " || Failed to Update employee with ID:  " + empId));
 
 		modelMapper.map(empDto, employee);
 
