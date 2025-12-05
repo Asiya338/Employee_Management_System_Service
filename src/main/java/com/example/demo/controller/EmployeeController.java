@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.demo.dto.EmployeeCreateDto;
+import com.example.demo.dto.EmployeeDelDto;
 import com.example.demo.dto.EmployeeResponseDto;
 import com.example.demo.dto.EmployeeUpdateDto;
 import com.example.demo.service.EmployeeService;
@@ -136,10 +137,10 @@ public class EmployeeController {
 	}
 
 	@DeleteMapping("/{empId}")
-	public ResponseEntity<String> deleteEmployee(@PathVariable int empId) {
+	public ResponseEntity<EmployeeDelDto> deleteEmployee(@PathVariable int empId) {
 		log.info("Deleting employee details with emp id : {} ", empId);
 
-		String response = employeeService.deleteEmployeeById(empId);
+		EmployeeDelDto response = employeeService.deleteEmployeeById(empId);
 
 		log.info("Deleted Employee with employee id : {}  ", empId);
 

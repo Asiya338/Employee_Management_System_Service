@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 
 import com.example.demo.constants.Constant;
 import com.example.demo.dto.EmployeeCreateDto;
+import com.example.demo.dto.EmployeeDelDto;
 import com.example.demo.dto.EmployeeResponseDto;
 import com.example.demo.dto.EmployeeUpdateDto;
 import com.example.demo.entity.Employee;
@@ -19,6 +20,7 @@ import com.example.demo.enums.EmpStatusEnum;
 import com.example.demo.enums.ErrorCodeEnum;
 import com.example.demo.exception.BadRequestException;
 import com.example.demo.exception.DuplicateResourceException;
+import com.example.demo.exception.ResourceNotFoundException;
 import com.example.demo.repo.EmployeeRepo;
 import com.example.demo.service.EmployeeService;
 
@@ -35,6 +37,10 @@ public class EmployeeServiceImpl implements EmployeeService {
 
 	private static final List<String> ALLOWED_SORT_FIELDS = List.of("id", "name", "email", "designationId",
 			"departmentId", "salary", "dob", "createdAt", "updatedAt", "joinedAt");
+
+	private static final List<Integer> ALLOWED_DEPT_ID = List.of(1, 2, 3, 4, 5);
+
+	private static final List<Integer> ALLOWED_DSGN_ID = List.of(1, 2, 3, 4, 5, 6);
 
 	@Override
 	public EmployeeResponseDto createEmployee(EmployeeCreateDto employeeDto) {
@@ -97,31 +103,43 @@ public class EmployeeServiceImpl implements EmployeeService {
 	public EmployeeResponseDto getEmployeeById(int empId) {
 		log.info("Employee with id : {} ", empId);
 
-		Employee empById = employeeRepo.findById(empId).orElseThrow(null);
+		Employee empById = employeeRepo.findById(empId).orElseThrow(
+				() -> new ResourceNotFoundException(ErrorCodeEnum.RESOURCE_WITH_ID__NOT_FOUND.getErrorCode(),
+						ErrorCodeEnum.RESOURCE_WITH_ID__NOT_FOUND.getErrorMessage() + " || No such employee with Id : "
+								+ empId));
 
 		EmployeeResponseDto response = modelMapper.map(empById, EmployeeResponseDto.class);
 
 		log.info("Employee details with id : {} ", empId);
 
 		return response;
-
 	}
 
 	@Override
-	public String deleteEmployeeById(int empId) {
+	public EmployeeDelDto deleteEmployeeById(int empId) {
 		log.info("Deleting Employee with id : {} ", empId);
 
-		employeeRepo.deleteById(empId);
+		Employee empById = employeeRepo.findById(empId).orElseThrow(
+				() -> new ResourceNotFoundException(ErrorCodeEnum.RESOURCE_WITH_ID__NOT_FOUND.getErrorCode(),
+						ErrorCodeEnum.RESOURCE_WITH_ID__NOT_FOUND.getErrorMessage()
+								+ "||Unable to delete employee with Id : " + empId));
+
+		employeeRepo.delete(empById);
 
 		log.info("deleted Employee with id : {} ", empId);
 
-		return "Deleted Successfuly";
+		return new EmployeeDelDto(empId, LocalDateTime.now());
 
 	}
 
 	@Override
 	public List<EmployeeResponseDto> getAllEmployeesByDepId(int depId) {
 		log.info("Get all employees from department : {}", depId);
+
+		if (!ALLOWED_DEPT_ID.contains(depId)) {
+			throw new BadRequestException(ErrorCodeEnum.INVALID_DEPT_ID.getErrorCode(),
+					ErrorCodeEnum.INVALID_DEPT_ID.getErrorMessage() + " Allowed values: " + ALLOWED_DEPT_ID);
+		}
 
 		List<Employee> employees = employeeRepo.findByDepartmentId(depId);
 
@@ -136,6 +154,11 @@ public class EmployeeServiceImpl implements EmployeeService {
 	@Override
 	public List<EmployeeResponseDto> getAllEmployeesByDsgnId(int dsgnId) {
 		log.info("Get all employees from designation : {}", dsgnId);
+
+		if (!ALLOWED_DSGN_ID.contains(dsgnId)) {
+			throw new BadRequestException(ErrorCodeEnum.INVALID_DSGN_ID.getErrorCode(),
+					ErrorCodeEnum.INVALID_DSGN_ID.getErrorMessage() + " Allowed values: " + ALLOWED_DSGN_ID);
+		}
 
 		List<Employee> employees = employeeRepo.findByDesignationId(dsgnId);
 

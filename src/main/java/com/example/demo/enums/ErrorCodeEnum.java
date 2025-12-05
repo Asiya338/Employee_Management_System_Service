@@ -19,7 +19,9 @@ public enum ErrorCodeEnum {
 	ILLEGAL_ARGUMENT_EXCEPTION("10008", "Illegal Argument Exception "),
 	PROPERTY_REFERENCE_EXCEPTION("10009", "Property Reference Exception"),
 	INVALID_PAGE("100010", "Page must not be negative... "), INVALID_SIZE("100011", "Size must be positive... "),
-	INVALID_SORT_BY("10012", "Could not Sort by given field. Please " + "enter valid sortBy field..  ");
+	INVALID_SORT_BY("10012", "Could not Sort by given field. Please enter valid sortBy field..  "),
+	RESOURCE_WITH_ID__NOT_FOUND("10013", "Resource not found with given Id..."),
+	INVALID_DEPT_ID("10014", "Department id is invalid.."), INVALID_DSGN_ID("10015", "Designation Id is invalid..");
 
 	String errorCode;
 	String errorMessage;
