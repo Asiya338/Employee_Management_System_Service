@@ -13,10 +13,10 @@ public class Constant {
 
 	public static final String traceId = "traceId";
 
+	public static final String DEPT_BASE_URL = "http://localhost:8088/api/v1/departments";
+
+	public static final String DSGN_BASE_URL = "http://localhost:8089/api/v1/designations";
+
 	public static final List<String> ALLOWED_SORT_FIELDS = List.of("id", "name", "email", "designationId",
 			"departmentId", "salary", "dob", "createdAt", "updatedAt", "joinedAt");
-
-	public static final List<Integer> ALLOWED_DEPT_ID = List.of(1, 2, 3, 4, 5);
-
-	public static final List<Integer> ALLOWED_DSGN_ID = List.of(1, 2, 3, 4, 5, 6);
 }

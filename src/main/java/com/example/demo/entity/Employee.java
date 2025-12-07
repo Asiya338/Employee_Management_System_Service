@@ -12,6 +12,8 @@ import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.PrePersist;
+import jakarta.persistence.PreUpdate;
 import jakarta.persistence.Table;
 import lombok.Data;
 
@@ -66,4 +68,16 @@ public class Employee {
 	@Enumerated(EnumType.STRING)
 	@Column(name = "employee_status")
 	private EmpStatusEnum employeeStatus = EmpStatusEnum.ACTIVE;
+
+	@PrePersist
+	void onCreate() {
+		createdAt = LocalDateTime.now();
+		updatedAt = LocalDateTime.now();
+		joinedAt = LocalDateTime.now();
+	}
+
+	@PreUpdate
+	void onUpdate() {
+		updatedAt = LocalDateTime.now();
+	}
 }

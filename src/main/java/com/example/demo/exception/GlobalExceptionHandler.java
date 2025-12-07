@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import com.example.demo.constants.Constant;
+import com.example.demo.dto.ErrorResponse;
 import com.example.demo.enums.ErrorCodeEnum;
 
 import jakarta.servlet.http.HttpServletRequest;
@@ -26,43 +27,43 @@ public class GlobalExceptionHandler {
 
 	@ExceptionHandler(ResourceNotFoundException.class)
 	public ResponseEntity<ErrorResponse> resourceNotFound(ResourceNotFoundException ex, HttpServletRequest req) {
-		log.info("Resource not found exception occured : {} ", ex.getMessage(), ex);
+		log.error("Resource not found exception occured : {} ", ex.getMessage(), ex);
 
 		ErrorResponse response = new ErrorResponse(ex.getErrorCode(), ex.getErrorMessage(), req.getRequestURI(),
 				MDC.get(Constant.traceId), LocalDateTime.now(), req.getMethod());
 
-		log.info("ResourceNotFoundException || Error response : {} ", response);
+		log.error("ResourceNotFoundException || Error response : {} ", response);
 
 		return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
 	}
 
 	@ExceptionHandler(BadRequestException.class)
 	public ResponseEntity<ErrorResponse> badRequest(BadRequestException ex, HttpServletRequest req) {
-		log.info("Bad Request Exception occured : {} ", ex.getMessage(), ex);
+		log.error("Bad Request Exception occured : {} ", ex.getMessage(), ex);
 
 		ErrorResponse response = new ErrorResponse(ex.getErrorCode(), ex.getErrorMessage(), req.getRequestURI(),
 				MDC.get(Constant.traceId), LocalDateTime.now(), req.getMethod());
 
-		log.info("BadRequestException || Error response : {} ", response);
+		log.error("BadRequestException || Error response : {} ", response);
 
 		return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
 	}
 
 	@ExceptionHandler(DuplicateResourceException.class)
 	public ResponseEntity<ErrorResponse> duplicateRequest(DuplicateResourceException ex, HttpServletRequest req) {
-		log.info("Duplicate Resource Exception occured : {} ", ex.getMessage(), ex);
+		log.error("Duplicate Resource Exception occured : {} ", ex.getMessage(), ex);
 
 		ErrorResponse response = new ErrorResponse(ex.getErrorCode(), ex.getErrorMessage(), req.getRequestURI(),
 				MDC.get(Constant.traceId), LocalDateTime.now(), req.getMethod());
 
-		log.info("DuplicateResourceException || Error response : {} ", response);
+		log.error("DuplicateResourceException || Error response : {} ", response);
 
 		return ResponseEntity.status(HttpStatus.CONFLICT).body(response);
 	}
 
 	@ExceptionHandler(MethodArgumentNotValidException.class)
 	public ResponseEntity<ErrorResponse> validationError(MethodArgumentNotValidException ex, HttpServletRequest req) {
-		log.info("Validation Exception occured : {} ", ex.getMessage(), ex);
+		log.error("Validation Exception occured : {} ", ex.getMessage(), ex);
 
 		String msg = ex.getBindingResult().getFieldErrors().stream().map(FieldError::getDefaultMessage).findFirst()
 				.orElse("Invalid input");
@@ -70,7 +71,7 @@ public class GlobalExceptionHandler {
 		ErrorResponse response = new ErrorResponse(ErrorCodeEnum.METHOD_ARGUMENT_INVALID.getErrorCode(), msg,
 				req.getRequestURI(), MDC.get(Constant.traceId), LocalDateTime.now(), req.getMethod());
 
-		log.info("ValidationException || Error response : {} ", response);
+		log.error("ValidationException || Error response : {} ", response);
 
 		return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
 	}
@@ -78,6 +79,9 @@ public class GlobalExceptionHandler {
 	@ExceptionHandler(HttpMessageNotReadableException.class)
 	public ResponseEntity<ErrorResponse> handleJsonParseError(HttpMessageNotReadableException ex,
 			HttpServletRequest req) {
+
+		log.error("Http Message Not Readable Exception Occured : {}", ex.getMessage(), ex);
+
 		String message = ex.getMessage();
 
 		if (ex.getCause() instanceof DateTimeParseException) {
@@ -87,6 +91,8 @@ public class GlobalExceptionHandler {
 		ErrorResponse response = new ErrorResponse(ErrorCodeEnum.HTTP_MESSAGE_NOT_READABLE_EXCEPTION.getErrorCode(),
 				message, req.getRequestURI(), MDC.get(Constant.traceId), LocalDateTime.now(), req.getMethod());
 
+		log.error("HttpMessageNotReadableException || Error response : {} ", response);
+
 		return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
 	}
 
@@ -94,29 +100,37 @@ public class GlobalExceptionHandler {
 	public ResponseEntity<ErrorResponse> handleDataIntegrityViolation(DataIntegrityViolationException ex,
 			HttpServletRequest req) {
 
+		log.error("Data Integrity Violation Exception Occured : {}", ex.getMessage(), ex);
+
 		String message = "Data integrity violation";
 
 		if (ex.getMessage() != null && ex.getMessage().contains("emp_designation_fk")) {
+			log.error("Foreign key violation for designationId");
+
 			message = "Invalid designationId: No such designation exists";
 		}
 
 		else if (ex.getMessage() != null && ex.getMessage().contains("emp_department_fk")) {
+			log.error("Foreign key violation for departmentId");
+
 			message = "Invalid departmentId: No such department exists";
 		}
 		ErrorResponse response = new ErrorResponse(ErrorCodeEnum.DATA_INTEGRITY_VIOLATION_EXCEPTION.getErrorCode(),
 				message, req.getRequestURI(), MDC.get(Constant.traceId), LocalDateTime.now(), req.getMethod());
+
+		log.error("Data integrity violation exception || error response : {} ", response);
 
 		return ResponseEntity.status(HttpStatus.CONFLICT).body(response);
 	}
 
 	@ExceptionHandler(IllegalArgumentException.class)
 	public ResponseEntity<ErrorResponse> illegalArgsRequest(IllegalArgumentException ex, HttpServletRequest req) {
-		log.info("IllegalArgumentException occured : {} ", ex.getMessage(), ex);
+		log.error("IllegalArgumentException occured : {} ", ex.getMessage(), ex);
 
 		ErrorResponse response = new ErrorResponse(ErrorCodeEnum.ILLEGAL_ARGUMENT_EXCEPTION.getErrorCode(),
 				ex.getMessage(), req.getRequestURI(), MDC.get(Constant.traceId), LocalDateTime.now(), req.getMethod());
 
-		log.info("IllegalArgumentException || Error response : {} ", response);
+		log.error("IllegalArgumentException || Error response : {} ", response);
 
 		return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
 	}
@@ -124,24 +138,24 @@ public class GlobalExceptionHandler {
 	@ExceptionHandler(PropertyReferenceException.class)
 	public ResponseEntity<ErrorResponse> propertyReferenceException(PropertyReferenceException ex,
 			HttpServletRequest req) {
-		log.info("PropertyReferenceException occured : {} ", ex.getMessage(), ex);
+		log.error("PropertyReferenceException occured : {} ", ex.getMessage(), ex);
 
 		ErrorResponse response = new ErrorResponse(ErrorCodeEnum.PROPERTY_REFERENCE_EXCEPTION.getErrorCode(),
 				ex.getMessage(), req.getRequestURI(), MDC.get(Constant.traceId), LocalDateTime.now(), req.getMethod());
 
-		log.info("PropertyReferenceException || Error response : {} ", response);
+		log.error("PropertyReferenceException || Error response : {} ", response);
 
 		return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
 	}
 
-//	@ExceptionHandler(Exception.class)
+	@ExceptionHandler(Exception.class)
 	public ResponseEntity<ErrorResponse> genericException(Exception ex, HttpServletRequest req) {
-		log.info("Application Exception occured : {} ", ex.getMessage(), ex);
+		log.error("Application Exception occured : {} ", ex.getMessage(), ex);
 
 		ErrorResponse response = new ErrorResponse(ErrorCodeEnum.GENERIC_EXCEPTION.getErrorCode(), ex.getMessage(),
 				req.getRequestURI(), MDC.get(Constant.traceId), LocalDateTime.now(), req.getMethod());
 
-		log.info("Application Exception || Error response : {} ", response);
+		log.error("Application Exception || Error response : {} ", response);
 
 		return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
 	}

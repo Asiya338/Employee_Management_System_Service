@@ -6,7 +6,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 
 import com.example.demo.dto.EmployeeCreateDto;
-import com.example.demo.dto.EmployeeDelDto;
 import com.example.demo.dto.EmployeeResponseDto;
 import com.example.demo.dto.EmployeeUpdateDto;
 
@@ -19,7 +18,7 @@ public interface EmployeeService {
 
 	EmployeeResponseDto getEmployeeById(int empId);
 
-	EmployeeDelDto deleteEmployeeById(int empId);
+	EmployeeResponseDto deleteEmployeeById(int empId);
 
 	EmployeeResponseDto updateEmployeeById(int empId, EmployeeUpdateDto empDto);
 

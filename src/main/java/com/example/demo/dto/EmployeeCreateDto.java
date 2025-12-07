@@ -3,8 +3,8 @@ package com.example.demo.dto;
 import java.time.LocalDate;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.annotation.JsonInclude;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
@@ -19,35 +19,42 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@JsonInclude(JsonInclude.Include.NON_NULL)
 public class EmployeeCreateDto {
 
+	@Schema(description = "Employee Full Name", example = "John Doe")
 	@NotNull(message = "Name is mandatory")
 	@Size(min = 3, max = 30, message = "Name must be between 2 and 30 characters")
 	private String name;
 
+	@Schema(description = "Employee email address", example = "johnDoe567@gmail.com")
 	@NotNull(message = "Email is mandatory")
 	@Email(message = "Email should be valid")
 	private String email;
 
 	// Role is optional (managed later by auth service)
+	@Schema(description = "Employee role", example = "EMPLOYEE")
 	private String role;
 
+	@Schema(description = "Employee Date of Birth ", example = "2001-10-20")
 	@NotNull(message = "Date of birth is mandatory")
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
 	@Past(message = "DOB must be a past date")
 	private LocalDate dob;
 
+	@Schema(description = "Employee designation", example = "2")
 	@NotNull(message = "Designation ID is mandatory")
 	private Integer designationId;
 
+	@Schema(description = "Employee department", example = "3")
 	@NotNull(message = "Department ID is mandatory")
 	private Integer departmentId;
 
+	@Schema(description = "10 digits Phone Number", example = "1234567890")
 	@NotNull(message = "Phone number is mandatory")
 	@Pattern(regexp = "^[1-9]\\d{9}$", message = "Phone number must be exactly 10 digits")
 	private String phoneNumber;
 
+	@Schema(description = "Employee Salary", example = "100000")
 	@NotNull(message = "Salary is mandatory")
 	@PositiveOrZero(message = "Salary must be non-negative")
 	@Min(10000)

@@ -23,7 +23,7 @@ public enum ErrorCodeEnum {
 	RESOURCE_WITH_ID__NOT_FOUND("10013", "Resource not found with given Id..."),
 	INVALID_DEPT_ID("10014", "Department id is invalid.."), INVALID_DSGN_ID("10015", "Designation Id is invalid.."),
 	INVALID_STATUS("10016", "Invalid status. Allowed values: ACTIVE, INACTIVE, TERMINATED"),
-	EMPTY_INPUT("10017", "Input cannot be null or empty...");
+	EMPTY_INPUT("10017", "Input cannot be null or empty..."), INVALID_SEARCH("10018", "Invalid search criteria...");
 
 	String errorCode;
 	String errorMessage;

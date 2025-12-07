@@ -1,98 +1,39 @@
--- =====================================================
--- Drop old database and user (if exists)
--- =====================================================
+use employee_management;
 
-DROP DATABASE IF EXISTS employee_management;
-DROP USER IF EXISTS 'ems'@'%';
+DROP TABLE IF EXISTS employees;
 
--- =====================================================
--- Create database
--- =====================================================
+CREATE TABLE employees (
+    id INT NOT NULL AUTO_INCREMENT,
+    
+    name VARCHAR(50) NOT NULL,
 
-CREATE DATABASE employee_management;
+    employee_code VARCHAR(20) NOT NULL UNIQUE,
+    
+    email VARCHAR(100) NOT NULL UNIQUE,
 
--- =====================================================
--- Create user
--- =====================================================
+    role VARCHAR(50),
 
-CREATE USER 'ems'@'%' IDENTIFIED BY 'Ems@2025#Strong';
-GRANT ALL PRIVILEGES ON *.* TO 'ems'@'%';
-FLUSH PRIVILEGES;
+    dob DATE,
 
--- =====================================================
--- Select DB
--- =====================================================
+    designation_id INT NOT NULL,
 
-USE employee_management;
+    department_id INT NOT NULL,
 
--- =====================================================
--- MASTER TABLE: Department
--- =====================================================
+    phone_number VARCHAR(15),
 
-CREATE TABLE `department` (
-  `id` INT NOT NULL,
-  `name` VARCHAR(100) NOT NULL,
-  `code` VARCHAR(20) NOT NULL,
-  `status` TINYINT DEFAULT 1,
-  `creation_date` TIMESTAMP(2) NOT NULL DEFAULT CURRENT_TIMESTAMP(2),
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+    salary DOUBLE,
 
--- =====================================================
--- MASTER TABLE: Designation
--- =====================================================
+    joined_at DATETIME,
 
-CREATE TABLE `designation` (
-  `id` INT NOT NULL,
-  `name` VARCHAR(100) NOT NULL,
-  `status` TINYINT DEFAULT 1,
-  `creation_date` TIMESTAMP(2) NOT NULL DEFAULT CURRENT_TIMESTAMP(2),
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
 
--- =====================================================
--- MASTER TABLE: Role
--- (Optional – can be used later with Auth-Service)
--- =====================================================
+    updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
 
-CREATE TABLE `role_master` (
-  `id` INT NOT NULL,
-  `name` VARCHAR(50) NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+    created_by VARCHAR(50),
 
--- =====================================================
--- MAIN TABLE: Employees
--- =====================================================
+    updated_by VARCHAR(50),
 
-CREATE TABLE `employees` (
-  `id` INT NOT NULL AUTO_INCREMENT,
-  `name` VARCHAR(100) NOT NULL,
-  `employee_code` VARCHAR(20) NOT NULL UNIQUE,
-  `email` VARCHAR(100) NOT NULL UNIQUE,
-  `password` VARCHAR(255) NOT NULL,
-  `role` VARCHAR(50),
-  
-  `dob` DATE,
-  `designation_id` INT,
-  `department_id` INT,
-  
-  `phone_number` BIGINT,
-  `salary` DECIMAL(10,2),
-  
-  `joined_at` TIMESTAMP(2),
-  
-  `employee_status` ENUM('ACTIVE','INACTIVE','TERMINATED') DEFAULT 'ACTIVE',
-  
-  `created_at` TIMESTAMP(2) NOT NULL DEFAULT CURRENT_TIMESTAMP(2),
-  `updated_at` TIMESTAMP(2) NOT NULL DEFAULT CURRENT_TIMESTAMP(2) ON UPDATE CURRENT_TIMESTAMP(2),
-  
-  `created_by` VARCHAR(50),
-  `updated_by` VARCHAR(50),
+    employee_status ENUM('ACTIVE','INACTIVE','TERMINATED') DEFAULT 'ACTIVE',
 
-  PRIMARY KEY (`id`),
-
-  -- Foreign Keys
-  CONSTRAINT `emp_department_fk` FOREIGN KEY (`department_id`) REFERENCES `department`(`id`),
-  CONSTRAINT `emp_designation_fk` FOREIGN KEY (`designation_id`) REFERENCES `designation`(`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+    PRIMARY KEY (id)
+);
