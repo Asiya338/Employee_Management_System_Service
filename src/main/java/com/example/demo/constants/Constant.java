@@ -4,6 +4,8 @@ import java.util.List;
 
 public class Constant {
 
+	public static String dummyEmail = "email@Company.com";
+
 	private Constant() {
 	};
 

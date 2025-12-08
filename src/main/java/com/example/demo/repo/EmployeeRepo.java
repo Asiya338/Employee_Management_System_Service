@@ -24,4 +24,6 @@ public interface EmployeeRepo extends JpaRepository<Employee, Integer> {
 	Employee findByEmail(String email);
 
 	List<Employee> findByNameContainingIgnoreCase(String name);
+
+	boolean existsByEmail(String email);
 }

@@ -18,12 +18,12 @@ import com.example.demo.entity.Employee;
 import com.example.demo.enums.EmpStatusEnum;
 import com.example.demo.enums.ErrorCodeEnum;
 import com.example.demo.exception.BadRequestException;
-import com.example.demo.exception.DuplicateResourceException;
 import com.example.demo.exception.ResourceNotFoundException;
 import com.example.demo.http.DepartmentClient;
 import com.example.demo.http.DesignationClient;
 import com.example.demo.repo.EmployeeRepo;
 import com.example.demo.service.EmployeeService;
+import com.example.demo.service.impl.helper.EmployeeServiceHelper;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -37,17 +37,11 @@ public class EmployeeServiceImpl implements EmployeeService {
 	private final ModelMapper modelMapper;
 	private final DepartmentClient departmentClient;
 	private final DesignationClient designationClient;
+	private final EmployeeServiceHelper employeeServiceHelper;
 
 	@Override
 	public EmployeeResponseDto createEmployee(EmployeeCreateDto employeeDto) {
 		log.info("Employee Create DTO : {} ", employeeDto);
-
-		if (employeeRepo.findByEmail(employeeDto.getEmail()) != null) {
-			log.error("Employee with email {} already exists ", employeeDto.getEmail());
-
-			throw new DuplicateResourceException(ErrorCodeEnum.DUPLICATE_EMAIL.getErrorCode(),
-					ErrorCodeEnum.DUPLICATE_EMAIL.getErrorMessage());
-		}
 
 		if (!departmentClient.isValidDepartment(employeeDto.getDepartmentId())) {
 			log.error("Department is not valid : {} ", employeeDto.getDepartmentId());
@@ -65,11 +59,13 @@ public class EmployeeServiceImpl implements EmployeeService {
 
 		Employee employee = modelMapper.map(employeeDto, Employee.class);
 		employee.setEmployeeCode(Constant.dummyEmpCode);
+		employee.setEmail(Constant.dummyEmail);
 
 		Employee savedEmployee = employeeRepo.save(employee);
 
 		String empCode = String.format(Constant.formatEmpCode, savedEmployee.getId());
 		savedEmployee.setEmployeeCode(empCode);
+		savedEmployee.setEmail(employeeServiceHelper.generateCompanyEmail(employeeDto.getName(), empCode));
 
 		employee = employeeRepo.save(savedEmployee);
 		EmployeeResponseDto response = modelMapper.map(employee, EmployeeResponseDto.class);
@@ -139,13 +135,15 @@ public class EmployeeServiceImpl implements EmployeeService {
 						ErrorCodeEnum.RESOURCE_WITH_ID__NOT_FOUND.getErrorMessage()
 								+ "||Unable to delete employee with Id : " + empId));
 
-		employeeRepo.delete(empById);
+		empById.setIsDeleted(true);
+		employeeRepo.save(empById);
 
 		log.info("deleted Employee with id : {} ", empId);
 
 		EmployeeResponseDto response = new EmployeeResponseDto();
 		response.setId(empId);
 		response.setDeletedAt(LocalDateTime.now());
+		response.setIsDeleted(true);
 
 		log.error("Employee deleted : {} ", response);
 

@@ -58,4 +58,6 @@ public class EmployeeResponseDto {
 	@Schema(description = "Employee deleted at", example = "2026-10-14 21:11:11.12")
 	private LocalDateTime deletedAt;
 
+	@Schema(description = "Is Employee deleted?", example = "false")
+	private Boolean isDeleted;
 }

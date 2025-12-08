@@ -3,6 +3,8 @@ package com.example.demo.entity;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
+import org.hibernate.annotations.Where;
+
 import com.example.demo.enums.EmpStatusEnum;
 
 import jakarta.persistence.Column;
@@ -13,6 +15,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.PrePersist;
+import jakarta.persistence.PreRemove;
 import jakarta.persistence.PreUpdate;
 import jakarta.persistence.Table;
 import lombok.Data;
@@ -20,6 +23,7 @@ import lombok.Data;
 @Data
 @Entity
 @Table(name = "employees")
+@Where(clause = "is_deleted = false")
 public class Employee {
 
 	@Id
@@ -69,6 +73,9 @@ public class Employee {
 	@Column(name = "employee_status")
 	private EmpStatusEnum employeeStatus = EmpStatusEnum.ACTIVE;
 
+	@Column(name = "is_deleted", nullable = false)
+	private Boolean isDeleted = false;
+
 	@PrePersist
 	void onCreate() {
 		createdAt = LocalDateTime.now();
@@ -79,5 +86,10 @@ public class Employee {
 	@PreUpdate
 	void onUpdate() {
 		updatedAt = LocalDateTime.now();
+	}
+
+	@PreRemove
+	public void preventHardDelete() {
+		throw new UnsupportedOperationException("Hard delete is not allowed. Use soft delete instead.");
 	}
 }

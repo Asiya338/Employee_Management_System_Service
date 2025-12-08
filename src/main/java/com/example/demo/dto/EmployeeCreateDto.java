@@ -5,7 +5,6 @@ import java.time.LocalDate;
 import com.fasterxml.jackson.annotation.JsonFormat;
 
 import io.swagger.v3.oas.annotations.media.Schema;
-import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Past;
@@ -25,11 +24,6 @@ public class EmployeeCreateDto {
 	@NotNull(message = "Name is mandatory")
 	@Size(min = 3, max = 30, message = "Name must be between 2 and 30 characters")
 	private String name;
-
-	@Schema(description = "Employee email address", example = "johnDoe567@gmail.com")
-	@NotNull(message = "Email is mandatory")
-	@Email(message = "Email should be valid")
-	private String email;
 
 	// Role is optional (managed later by auth service)
 	@Schema(description = "Employee role", example = "EMPLOYEE")

@@ -42,4 +42,7 @@ public class EmployeeUpdateDto {
 	@Schema(description = "Employee Salary", example = "12000")
 	@PositiveOrZero(message = "Salary must be non-negative")
 	private Double salary;
+
+	@Schema(description = "Is Deleted flag", example = "false")
+	private Boolean isDeleted;
 }
