@@ -1,6 +1,22 @@
-use employee_management;
 
-DROP TABLE IF EXISTS employees;
+DROP DATABASE IF EXISTS employee_management;
+DROP USER IF EXISTS 'ems'@'%';
+
+-- =====================================================
+-- Create database
+-- =====================================================
+
+CREATE DATABASE employee_management;
+
+-- =====================================================
+-- Create user
+-- =====================================================
+
+CREATE USER 'ems'@'%' IDENTIFIED BY 'Ems@2025#Strong';
+GRANT ALL PRIVILEGES ON *.* TO 'ems'@'%';
+FLUSH PRIVILEGES;
+
+USE employee_management;
 
 CREATE TABLE employees (
     id INT NOT NULL AUTO_INCREMENT,
