@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import com.example.demo.constants.Constant;
-import com.example.demo.dto.ErrorResponse;
+import com.example.demo.dto.res.ErrorResponse;
 import com.example.demo.enums.ErrorCodeEnum;
 
 import jakarta.servlet.http.HttpServletRequest;

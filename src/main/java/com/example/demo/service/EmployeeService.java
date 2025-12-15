@@ -5,31 +5,31 @@ import java.util.List;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 
-import com.example.demo.dto.EmployeeCreateDto;
-import com.example.demo.dto.EmployeeResponseDto;
-import com.example.demo.dto.EmployeeUpdateDto;
+import com.example.demo.dto.req.EmployeeCreateReqDTO;
+import com.example.demo.dto.req.EmployeeUpdateReqDTO;
+import com.example.demo.dto.res.EmployeeResponseDTO;
 
 @Service
 public interface EmployeeService {
 
-	EmployeeResponseDto createEmployee(EmployeeCreateDto employee);
+	EmployeeResponseDTO createEmployee(EmployeeCreateReqDTO employee);
 
-	Page<EmployeeResponseDto> getAllEmployees(int page, int size, String sortBy, String order);
+	Page<EmployeeResponseDTO> getAllEmployees(int page, int size, String sortBy, String order);
 
-	EmployeeResponseDto getEmployeeById(int empId);
+	EmployeeResponseDTO getEmployeeById(int empId);
 
-	EmployeeResponseDto deleteEmployeeById(int empId);
+	EmployeeResponseDTO deleteEmployeeById(int empId);
 
-	EmployeeResponseDto updateEmployeeById(int empId, EmployeeUpdateDto empDto);
+	EmployeeResponseDTO updateEmployeeById(int empId, EmployeeUpdateReqDTO empDto);
 
-	List<EmployeeResponseDto> getAllEmployeesByDepId(int depId);
+	List<EmployeeResponseDTO> getAllEmployeesByDepId(int depId);
 
-	List<EmployeeResponseDto> getAllEmployeesByDsgnId(int dsgnId);
+	List<EmployeeResponseDTO> getAllEmployeesByDsgnId(int dsgnId);
 
-	List<EmployeeResponseDto> getAllEmployeesByRole(String roleName);
+	List<EmployeeResponseDTO> getAllEmployeesByRole(String roleName);
 
-	List<EmployeeResponseDto> getAllEmployeesByStatus(String status);
+	List<EmployeeResponseDTO> getAllEmployeesByStatus(String status);
 
-	List<EmployeeResponseDto> searchEmployees(String name, String email, String employeeCode);
+	List<EmployeeResponseDTO> searchEmployees(String name, String email, String employeeCode);
 
 }

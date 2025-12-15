@@ -1,7 +1,5 @@
 package com.example.demo.constants;
 
-import java.util.List;
-
 public class Constant {
 
 	public static String dummyEmail = "email@Company.com";
@@ -19,6 +17,5 @@ public class Constant {
 
 	public static final String DSGN_BASE_URL = "http://localhost:8089/api/v1/designations";
 
-	public static final List<String> ALLOWED_SORT_FIELDS = List.of("id", "name", "email", "designationId",
-			"departmentId", "salary", "dob", "createdAt", "updatedAt", "joinedAt");
+//	public static final String AUTH_BASE_URL = "http://localhost:8086/api/v1/auth";
 }

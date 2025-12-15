@@ -1,4 +1,4 @@
-package com.example.demo.dto;
+package com.example.demo.dto.req;
 
 import java.time.LocalDate;
 
@@ -18,7 +18,7 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class EmployeeCreateDto {
+public class EmployeeCreateReqDTO {
 
 	@Schema(description = "Employee Full Name", example = "John Doe")
 	@NotNull(message = "Name is mandatory")

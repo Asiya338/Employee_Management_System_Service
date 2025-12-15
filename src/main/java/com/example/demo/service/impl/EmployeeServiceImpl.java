@@ -11,9 +11,9 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import com.example.demo.constants.Constant;
-import com.example.demo.dto.EmployeeCreateDto;
-import com.example.demo.dto.EmployeeResponseDto;
-import com.example.demo.dto.EmployeeUpdateDto;
+import com.example.demo.dto.req.EmployeeCreateReqDTO;
+import com.example.demo.dto.req.EmployeeUpdateReqDTO;
+import com.example.demo.dto.res.EmployeeResponseDTO;
 import com.example.demo.entity.Employee;
 import com.example.demo.enums.EmpStatusEnum;
 import com.example.demo.enums.ErrorCodeEnum;
@@ -40,7 +40,7 @@ public class EmployeeServiceImpl implements EmployeeService {
 	private final EmployeeServiceHelper employeeServiceHelper;
 
 	@Override
-	public EmployeeResponseDto createEmployee(EmployeeCreateDto employeeDto) {
+	public EmployeeResponseDTO createEmployee(EmployeeCreateReqDTO employeeDto) {
 		log.info("Employee Create DTO : {} ", employeeDto);
 
 		if (!departmentClient.isValidDepartment(employeeDto.getDepartmentId())) {
@@ -68,7 +68,7 @@ public class EmployeeServiceImpl implements EmployeeService {
 		savedEmployee.setEmail(employeeServiceHelper.generateCompanyEmail(employeeDto.getName(), empCode));
 
 		employee = employeeRepo.save(savedEmployee);
-		EmployeeResponseDto response = modelMapper.map(employee, EmployeeResponseDto.class);
+		EmployeeResponseDTO response = modelMapper.map(employee, EmployeeResponseDTO.class);
 
 		log.info("Employee created : {} ", response);
 
@@ -76,7 +76,7 @@ public class EmployeeServiceImpl implements EmployeeService {
 	}
 
 	@Override
-	public Page<EmployeeResponseDto> getAllEmployees(int page, int size, String sortBy, String order) {
+	public Page<EmployeeResponseDTO> getAllEmployees(int page, int size, String sortBy, String order) {
 		log.info("get all employees on page:{}, size:{}, sortBy:{}, order:{}", page, size, sortBy, order);
 
 		if (page < 0) {
@@ -89,11 +89,6 @@ public class EmployeeServiceImpl implements EmployeeService {
 
 			throw new BadRequestException(ErrorCodeEnum.INVALID_SIZE.getErrorCode(),
 					ErrorCodeEnum.INVALID_SIZE.getErrorMessage());
-		} else if (!Constant.ALLOWED_SORT_FIELDS.contains(sortBy)) {
-			log.error("Invalid sortBy field || getAllEmployees : {} ", sortBy);
-
-			throw new BadRequestException(ErrorCodeEnum.INVALID_SORT_BY.getErrorCode(),
-					ErrorCodeEnum.INVALID_SORT_BY.getErrorMessage() + ": " + sortBy);
 		}
 
 		Sort.Direction direction = order.equalsIgnoreCase("desc") ? Sort.Direction.DESC : Sort.Direction.ASC;
@@ -102,8 +97,8 @@ public class EmployeeServiceImpl implements EmployeeService {
 
 		Page<Employee> employeePage = employeeRepo.findAll(pageable);
 
-		Page<EmployeeResponseDto> response = employeePage
-				.map(employee -> modelMapper.map(employee, EmployeeResponseDto.class));
+		Page<EmployeeResponseDTO> response = employeePage
+				.map(employee -> modelMapper.map(employee, EmployeeResponseDTO.class));
 
 		log.info("All employees || getAllEmployees : {} ", response);
 
@@ -111,7 +106,7 @@ public class EmployeeServiceImpl implements EmployeeService {
 	}
 
 	@Override
-	public EmployeeResponseDto getEmployeeById(int empId) {
+	public EmployeeResponseDTO getEmployeeById(int empId) {
 		log.info("Employee with id : {} ", empId);
 
 		Employee empById = employeeRepo.findById(empId).orElseThrow(
@@ -119,7 +114,7 @@ public class EmployeeServiceImpl implements EmployeeService {
 						ErrorCodeEnum.RESOURCE_WITH_ID__NOT_FOUND.getErrorMessage() + " || No such employee with Id : "
 								+ empId));
 
-		EmployeeResponseDto response = modelMapper.map(empById, EmployeeResponseDto.class);
+		EmployeeResponseDTO response = modelMapper.map(empById, EmployeeResponseDTO.class);
 
 		log.info("Employee details with id : {} ", empId);
 
@@ -127,7 +122,7 @@ public class EmployeeServiceImpl implements EmployeeService {
 	}
 
 	@Override
-	public EmployeeResponseDto deleteEmployeeById(int empId) {
+	public EmployeeResponseDTO deleteEmployeeById(int empId) {
 		log.info("Deleting Employee with id : {} ", empId);
 
 		Employee empById = employeeRepo.findById(empId).orElseThrow(
@@ -140,7 +135,7 @@ public class EmployeeServiceImpl implements EmployeeService {
 
 		log.info("deleted Employee with id : {} ", empId);
 
-		EmployeeResponseDto response = new EmployeeResponseDto();
+		EmployeeResponseDTO response = new EmployeeResponseDTO();
 		response.setId(empId);
 		response.setDeletedAt(LocalDateTime.now());
 		response.setIsDeleted(true);
@@ -151,7 +146,7 @@ public class EmployeeServiceImpl implements EmployeeService {
 	}
 
 	@Override
-	public List<EmployeeResponseDto> getAllEmployeesByDepId(int depId) {
+	public List<EmployeeResponseDTO> getAllEmployeesByDepId(int depId) {
 		log.info("Get all employees from department : {}", depId);
 
 		if (!departmentClient.isValidDepartment(depId)) {
@@ -163,8 +158,8 @@ public class EmployeeServiceImpl implements EmployeeService {
 
 		List<Employee> employees = employeeRepo.findByDepartmentId(depId);
 
-		List<EmployeeResponseDto> responseDto = employees.stream()
-				.map(employee -> modelMapper.map(employee, EmployeeResponseDto.class)).toList();
+		List<EmployeeResponseDTO> responseDto = employees.stream()
+				.map(employee -> modelMapper.map(employee, EmployeeResponseDTO.class)).toList();
 
 		log.info("Employees from department : {} , {}", depId, responseDto);
 
@@ -172,7 +167,7 @@ public class EmployeeServiceImpl implements EmployeeService {
 	}
 
 	@Override
-	public List<EmployeeResponseDto> getAllEmployeesByDsgnId(int dsgnId) {
+	public List<EmployeeResponseDTO> getAllEmployeesByDsgnId(int dsgnId) {
 		log.info("Get all employees from designation : {}", dsgnId);
 
 		if (!designationClient.isValidDesignation(dsgnId)) {
@@ -184,8 +179,8 @@ public class EmployeeServiceImpl implements EmployeeService {
 
 		List<Employee> employees = employeeRepo.findByDesignationId(dsgnId);
 
-		List<EmployeeResponseDto> responseDto = employees.stream()
-				.map(employee -> modelMapper.map(employee, EmployeeResponseDto.class)).toList();
+		List<EmployeeResponseDTO> responseDto = employees.stream()
+				.map(employee -> modelMapper.map(employee, EmployeeResponseDTO.class)).toList();
 
 		log.info("Employees from designation : {} , {}", dsgnId, responseDto);
 
@@ -193,13 +188,13 @@ public class EmployeeServiceImpl implements EmployeeService {
 	}
 
 	@Override
-	public List<EmployeeResponseDto> getAllEmployeesByRole(String role) {
+	public List<EmployeeResponseDTO> getAllEmployeesByRole(String role) {
 		log.info("Get all employees by role: {}", role);
 
 		List<Employee> employees = employeeRepo.findByRole(role);
 
-		List<EmployeeResponseDto> responseDto = employees.stream()
-				.map(employee -> modelMapper.map(employee, EmployeeResponseDto.class)).toList();
+		List<EmployeeResponseDTO> responseDto = employees.stream()
+				.map(employee -> modelMapper.map(employee, EmployeeResponseDTO.class)).toList();
 
 		log.info("Employees by role : {} || response : {}", role, responseDto);
 
@@ -207,7 +202,7 @@ public class EmployeeServiceImpl implements EmployeeService {
 	}
 
 	@Override
-	public List<EmployeeResponseDto> getAllEmployeesByStatus(String status) {
+	public List<EmployeeResponseDTO> getAllEmployeesByStatus(String status) {
 		log.info("Get all employees by employee status: {}", status);
 
 		EmpStatusEnum enumStatus;
@@ -224,8 +219,8 @@ public class EmployeeServiceImpl implements EmployeeService {
 
 		List<Employee> employees = employeeRepo.findByEmployeeStatus(enumStatus);
 
-		List<EmployeeResponseDto> responseDto = employees.stream()
-				.map(employee -> modelMapper.map(employee, EmployeeResponseDto.class)).toList();
+		List<EmployeeResponseDTO> responseDto = employees.stream()
+				.map(employee -> modelMapper.map(employee, EmployeeResponseDTO.class)).toList();
 
 		log.info("Employees by status : {} , {}", status, responseDto);
 
@@ -233,7 +228,7 @@ public class EmployeeServiceImpl implements EmployeeService {
 	}
 
 	@Override
-	public List<EmployeeResponseDto> searchEmployees(String name, String email, String employeeCode) {
+	public List<EmployeeResponseDTO> searchEmployees(String name, String email, String employeeCode) {
 		log.info("Searching employee/s based on employeeCode : {} , or email : {} , or name : {} ...", employeeCode,
 				email, name);
 
@@ -242,22 +237,22 @@ public class EmployeeServiceImpl implements EmployeeService {
 			if (employee != null) {
 				log.info("Employee with employeeCode: {}  ", employeeCode);
 
-				return List.of(modelMapper.map(employee, EmployeeResponseDto.class));
+				return List.of(modelMapper.map(employee, EmployeeResponseDTO.class));
 			}
 		} else if (email != null) {
 			Employee employee = employeeRepo.findByEmail(email);
 			if (employee != null) {
 				log.info("Employee with email: {}  ", email);
 
-				return List.of(modelMapper.map(employee, EmployeeResponseDto.class));
+				return List.of(modelMapper.map(employee, EmployeeResponseDTO.class));
 			}
 		} else if (name != null) {
 			List<Employee> employees = employeeRepo.findByNameContainingIgnoreCase(name);
 			if (!employees.isEmpty()) {
 				log.info("there are {} Employee with name: {}  ", employees.size(), name);
 
-				List<EmployeeResponseDto> response = employees.stream()
-						.map(employee -> modelMapper.map(employee, EmployeeResponseDto.class)).toList();
+				List<EmployeeResponseDTO> response = employees.stream()
+						.map(employee -> modelMapper.map(employee, EmployeeResponseDTO.class)).toList();
 				return response;
 			}
 		}
@@ -269,7 +264,7 @@ public class EmployeeServiceImpl implements EmployeeService {
 	}
 
 	@Override
-	public EmployeeResponseDto updateEmployeeById(int empId, EmployeeUpdateDto empDto) {
+	public EmployeeResponseDTO updateEmployeeById(int empId, EmployeeUpdateReqDTO empDto) {
 		log.info("Updating employee with employee id: {} | employee update dto : {} ", empId, empDto);
 
 		Employee employee = employeeRepo.findById(empId).orElseThrow(
@@ -295,7 +290,7 @@ public class EmployeeServiceImpl implements EmployeeService {
 
 		Employee savedEmployee = employeeRepo.save(employee);
 
-		EmployeeResponseDto response = modelMapper.map(savedEmployee, EmployeeResponseDto.class);
+		EmployeeResponseDTO response = modelMapper.map(savedEmployee, EmployeeResponseDTO.class);
 
 		log.info("Employee updated with id {} | employee :  {} ", empId, response);
 

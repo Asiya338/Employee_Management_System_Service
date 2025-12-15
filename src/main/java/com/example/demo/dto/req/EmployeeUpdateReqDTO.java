@@ -1,4 +1,4 @@
-package com.example.demo.dto;
+package com.example.demo.dto.req;
 
 import java.time.LocalDate;
 
@@ -19,7 +19,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class EmployeeUpdateDto {
+public class EmployeeUpdateReqDTO {
 
 	@Schema(description = "Employee Full Name", example = "John Doe")
 	@Size(min = 2, max = 30, message = "Name must be between 2 and 30 characters")

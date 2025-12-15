@@ -5,7 +5,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.client.WebClient;
 
 import com.example.demo.constants.Constant;
-import com.example.demo.dto.DesignationResponseDTO;
+import com.example.demo.dto.res.DesignationResponseDTO;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

@@ -1,4 +1,4 @@
-package com.example.demo.dto;
+package com.example.demo.dto.res;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -14,7 +14,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class EmployeeResponseDto {
+public class EmployeeResponseDTO {
 
 	@Schema(description = "Employee ID", example = "23")
 	private Integer id;

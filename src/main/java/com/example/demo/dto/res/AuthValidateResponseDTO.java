@@ -1,0 +1,24 @@
+package com.example.demo.dto.res;
+
+import java.util.List;
+
+import com.fasterxml.jackson.annotation.JsonInclude;
+
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
+@JsonInclude(JsonInclude.Include.NON_NULL)
+public class AuthValidateResponseDTO {
+
+	private Boolean valid;
+	private Long userId;
+	private String email;
+
+	private String role;
+	private List<String> permissions;
+
+}
