@@ -1,6 +1,6 @@
-Employee Management System (EMS)
+## Employee Management System (EMS)
 
-The Employee Management System (EMS) is a Spring Boot–based microservice responsible for managing employee data within a distributed microservices architecture.
+The **Employee Management System** (EMS) is a Spring Boot–based microservice responsible for managing employee data within a distributed microservices architecture.
 
 EMS is secured using a dedicated Authentication Service (Auth Service) implementing:
 
@@ -10,7 +10,7 @@ EMS is secured using a dedicated Authentication Service (Auth Service) implement
 
 🚫 Protected API Endpoints
 
-This service follows clean architecture, SOLID principles, and production-grade backend practices.
+This service follows clean microservices architecture, SOLID principles, and production-grade backend practices.
 
 ----
 🏗 System Architecture
@@ -35,7 +35,7 @@ Departments Service	Designation Service
 ```
 
 ----
-🔗 Related Microservices
+## Related Microservices
 
 The Employee Management System (EMS) is part of a distributed microservices architecture.
 Below are the related services:
@@ -48,23 +48,24 @@ Below are the related services:
 
 
 ----
-🔐 Authentication & Authorization
+## 🔐 Authentication & Authorization
 
 🧩 Auth Service
 
+
 The Auth Service handles:
 
-User registration
+- User registration
 
-Login
+- Login
 
-JWT token generation
+- JWT token generation
 
-Role assignment
+- Role assignment
 
 
 -----
-🔑 JWT Integration in EMS
+## 🔑 JWT Integration in EMS
 
 EMS:
 
@@ -83,7 +84,7 @@ USER	 : Read-only
 
 
 -----
-🛠 Tech Stack
+## 🛠 Tech Stack
 
 Java 17+
 
@@ -109,7 +110,7 @@ MDC Logging (traceId)
 
 
 -----
-📂 Project Structure
+## 📂 Project Structure
 
 ```
 employee-management-system/
@@ -131,59 +132,68 @@ employee-management-system/
 
 🗄 Database Schema
 
-📄 employees table
+```
+employees table
+```
 
+----
+## 🚀 Core Features
 
-🚀 Core Features
 ✅ Employee CRUD Operations
 
-Create
+- Create
 
-Update
+- Update
 
-Delete
+- Delete
 
-Get by ID
+- Get by ID
 
-Get all
+- Get all
+
 
 ✅ Pagination & Sorting
+
+```
 GET /api/v1/employees?page=0&size=10&sortBy=name&order=asc
+```
 
 ✅ Filtering
 
-By department
+- By department
 
-By designation
+- By designation
 
-By role
+- By role
 
-By status
+- By status
+
 
 ✅ Search API
 
 Priority-based search:
 
+```
 GET /api/v1/employees/search?name=asiya
 GET /api/v1/employees/search?email=test@example.com
 GET /api/v1/employees/search?employeeCode=EMP0001
+```
 
+## 🔁 Inter-Service Communication
 
-🔁 Inter-Service Communication
+- Before employee creation/update:
 
-Before employee creation/update:
+- Validate department via Department Service
 
-Validate department via Department Service
+- Validate designation via Designation Service
 
-Validate designation via Designation Service
+- Implemented using Spring WebClient.
 
-Implemented using Spring WebClient.
-
-No cross-database foreign keys used — microservice best practice.
+- No cross-database foreign keys used — microservice best practice.
 
 
 ----
-❗ Standard Error Response
+## ❗ Standard Error Response
 
 All errors follow a consistent structure:
 
@@ -199,54 +209,56 @@ All errors follow a consistent structure:
 ```
 
 ----
-Design Decisions
+## Design Decisions
 
-Loose coupling between services
+- Loose coupling between services
 
-JWT-secured endpoints
+- JWT-secured endpoints
 
-Role-based permission enforcement
+- Role-based permission enforcement
 
-Strict DTO ↔ Entity mapping
+- Strict DTO ↔ Entity mapping
 
-Centralized error codes
+- Centralized error codes
 
-Global exception handler
+- Global exception handler
 
-MDC-based traceId logging
+- MDC-based traceId logging
 
-Idempotent PUT operations
+- Idempotent PUT operations
 
 -----
-🧪 Sample Flow (Secure API Call)
-Step 1: Login via Auth Service
-POST /auth/login
+## 🧪 Sample Flow (Secure API Call)
 
+**Step 1:** Login via Auth Service
+POST /auth/login
 
 Receive JWT token.
 
-Step 2: Call EMS API
+**Step 2:** Call EMS API
 Authorization: Bearer <JWT_TOKEN>
 
-Step 3: Role Validation Applied
+**Step 3:** Role Validation Applied
 
 If role unauthorized → 403 Forbidden.
 
 
 ----
-Running EMS
+** Running EMS**
 
 1️⃣ Create MySQL database:
 
+```
 employee_management
-
+```
 
 2️⃣ Update properties:
 
+```
 spring.datasource.url=jdbc:mysql://localhost:3306/employee_management
 spring.datasource.username=YOUR_USERNAME
 spring.datasource.password=YOUR_PASSWORD
-
+```
 
 3️⃣ Run:
 
