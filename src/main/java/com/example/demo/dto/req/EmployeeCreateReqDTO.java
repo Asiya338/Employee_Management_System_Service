@@ -25,7 +25,6 @@ public class EmployeeCreateReqDTO {
 	@Size(min = 3, max = 30, message = "Name must be between 2 and 30 characters")
 	private String name;
 
-	// Role is optional (managed later by auth service)
 	@Schema(description = "Employee role", example = "EMPLOYEE")
 	private String role;
 

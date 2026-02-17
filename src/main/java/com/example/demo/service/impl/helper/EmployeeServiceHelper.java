@@ -1,7 +1,13 @@
 package com.example.demo.service.impl.helper;
 
+import java.util.NoSuchElementException;
+
+import org.springframework.security.access.AccessDeniedException;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
+import com.example.demo.entity.Employee;
 import com.example.demo.repo.EmployeeRepo;
 
 import lombok.RequiredArgsConstructor;
@@ -54,4 +60,23 @@ public class EmployeeServiceHelper {
 
 		return email;
 	}
+
+	public void checkSelfAccess(Employee employee) {
+		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+
+		boolean isAdmin = auth.getAuthorities().stream().anyMatch(a -> a.getAuthority().equals("ROLE_ADMIN"));
+
+		if (!isAdmin) {
+			String loggedInEmail = auth.getName();
+
+			Employee emp = employeeRepo.findById(employee.getId())
+					.orElseThrow(() -> new NoSuchElementException("Employee not found"));
+
+			if (!emp.getEmail().equals(loggedInEmail)) {
+				throw new AccessDeniedException("You can access only your own profile");
+			}
+		}
+
+	}
+
 }

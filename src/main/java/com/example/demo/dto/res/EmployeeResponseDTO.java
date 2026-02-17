@@ -60,4 +60,6 @@ public class EmployeeResponseDTO {
 
 	@Schema(description = "Is Employee deleted?", example = "false")
 	private Boolean isDeleted;
+
+	private String setPasswordUrl;
 }

@@ -22,7 +22,11 @@ public enum ErrorCodeEnum {
 	RESOURCE_WITH_ID__NOT_FOUND("30013", "Resource not found with given Id..."),
 	INVALID_DEPT_ID("30014", "Department id is invalid.."), INVALID_DSGN_ID("30015", "Designation Id is invalid.."),
 	INVALID_STATUS("30016", "Invalid status. Allowed values: ACTIVE, INACTIVE, TERMINATED"),
-	EMPTY_INPUT("30017", "Input cannot be null or empty..."), INVALID_SEARCH("30018", "Invalid search criteria...");
+	EMPTY_INPUT("30017", "Input cannot be null or empty..."), INVALID_SEARCH("30018", "Invalid search criteria..."),
+	TIMEOUT_EXCEPTION("30019", "Request timed out. Please try again later."),
+	AUTH_TIMEOUT_EXCEPTION("30020", "Authentication service did not respond in time"),
+	AUTH_RETRY_EXCEPTION("30021", "Max retry attempt reached"),
+	AUTH_CIRCUIT_OPEN("30022", "Auth service is not responding: Circuit OPEN"),;
 
 	String errorCode;
 	String errorMessage;

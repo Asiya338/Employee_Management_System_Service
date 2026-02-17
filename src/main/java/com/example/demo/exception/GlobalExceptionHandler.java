@@ -148,6 +148,18 @@ public class GlobalExceptionHandler {
 		return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
 	}
 
+	@ExceptionHandler(AuthServiceUnavailableException.class)
+	public ResponseEntity<ErrorResponse> handleAuthTimeout(AuthServiceUnavailableException ex, HttpServletRequest req) {
+		log.error("AuthServiceUnavailableException occured : {} ", ex.getMessage(), ex);
+
+		ErrorResponse response = new ErrorResponse(ex.getErrorCode(), ex.getErrorMessage(), req.getRequestURI(),
+				MDC.get(Constant.traceId), LocalDateTime.now(), req.getMethod());
+
+		log.error("AuthServiceUnavailableException || Error response : {} ", response);
+
+		return ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE).body(response);
+	}
+
 	@ExceptionHandler(Exception.class)
 	public ResponseEntity<ErrorResponse> genericException(Exception ex, HttpServletRequest req) {
 		log.error("Application Exception occured : {} ", ex.getMessage(), ex);

@@ -48,7 +48,7 @@ public class EmployeeController {
 		return ResponseEntity.created(location).body(created);
 	}
 
-	@PreAuthorize("hasAuthority('EMPLOYEE_READ')")
+	@PreAuthorize("hasRole('ADMIN')")
 	@GetMapping()
 	public ResponseEntity<Page<EmployeeResponseDTO>> getAllEmployees(@RequestParam(defaultValue = "0") int page,
 			@RequestParam(defaultValue = "10") int size, @RequestParam(defaultValue = "id") String sortBy,
@@ -62,7 +62,7 @@ public class EmployeeController {
 		return ResponseEntity.status(HttpStatus.OK).body(employees);
 	}
 
-	@PreAuthorize("hasAuthority('EMPLOYEE_READ')")
+	@PreAuthorize("hasRole('ADMIN')")
 	@GetMapping("/{empId}")
 	public ResponseEntity<EmployeeResponseDTO> getEmployeeById(@PathVariable int empId) {
 		log.info("Fetching employee details with emp id : {} ", empId);
@@ -76,7 +76,7 @@ public class EmployeeController {
 
 	@PreAuthorize("hasRole('ADMIN')")
 	@GetMapping("/department/{depId}")
-	public ResponseEntity<List<EmployeeResponseDTO>> getEmployeesByDevId(@PathVariable int depId) {
+	public ResponseEntity<List<EmployeeResponseDTO>> getEmployeesByDepId(@PathVariable int depId) {
 		log.info("Fetching employees with department id : {} ", depId);
 
 		List<EmployeeResponseDTO> employees = employeeService.getAllEmployeesByDepId(depId);
@@ -122,7 +122,7 @@ public class EmployeeController {
 		return ResponseEntity.status(HttpStatus.OK).body(employees);
 	}
 
-	@PreAuthorize("hasAuthority('EMPLOYEE_READ')")
+	@PreAuthorize("hasRole('ADMIN')")
 	@GetMapping("/search")
 	public ResponseEntity<List<EmployeeResponseDTO>> searchEmployees(@RequestParam(required = false) String name,
 			@RequestParam(required = false) String email, @RequestParam(required = false) String employeeCode) {

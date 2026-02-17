@@ -14,11 +14,13 @@ import com.example.demo.constants.Constant;
 import com.example.demo.dto.req.EmployeeCreateReqDTO;
 import com.example.demo.dto.req.EmployeeUpdateReqDTO;
 import com.example.demo.dto.res.EmployeeResponseDTO;
+import com.example.demo.dto.res.RegisterResponseDTO;
 import com.example.demo.entity.Employee;
 import com.example.demo.enums.EmpStatusEnum;
 import com.example.demo.enums.ErrorCodeEnum;
 import com.example.demo.exception.BadRequestException;
 import com.example.demo.exception.ResourceNotFoundException;
+import com.example.demo.http.AuthClient;
 import com.example.demo.http.DepartmentClient;
 import com.example.demo.http.DesignationClient;
 import com.example.demo.repo.EmployeeRepo;
@@ -38,6 +40,7 @@ public class EmployeeServiceImpl implements EmployeeService {
 	private final DepartmentClient departmentClient;
 	private final DesignationClient designationClient;
 	private final EmployeeServiceHelper employeeServiceHelper;
+	private final AuthClient authClient;
 
 	@Override
 	public EmployeeResponseDTO createEmployee(EmployeeCreateReqDTO employeeDto) {
@@ -68,7 +71,11 @@ public class EmployeeServiceImpl implements EmployeeService {
 		savedEmployee.setEmail(employeeServiceHelper.generateCompanyEmail(employeeDto.getName(), empCode));
 
 		employee = employeeRepo.save(savedEmployee);
+
+		RegisterResponseDTO authResponse = authClient.registerUser(employeeDto, employee.getEmail());
+
 		EmployeeResponseDTO response = modelMapper.map(employee, EmployeeResponseDTO.class);
+		response.setSetPasswordUrl(authResponse.getSetPasswordUrl());
 
 		log.info("Employee created : {} ", response);
 
@@ -113,6 +120,8 @@ public class EmployeeServiceImpl implements EmployeeService {
 				() -> new ResourceNotFoundException(ErrorCodeEnum.RESOURCE_WITH_ID__NOT_FOUND.getErrorCode(),
 						ErrorCodeEnum.RESOURCE_WITH_ID__NOT_FOUND.getErrorMessage() + " || No such employee with Id : "
 								+ empId));
+
+		employeeServiceHelper.checkSelfAccess(empById);
 
 		EmployeeResponseDTO response = modelMapper.map(empById, EmployeeResponseDTO.class);
 

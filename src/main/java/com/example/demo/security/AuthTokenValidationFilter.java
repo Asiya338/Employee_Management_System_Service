@@ -69,9 +69,11 @@ public class AuthTokenValidationFilter extends OncePerRequestFilter {
 		filterChain.doFilter(request, response);
 	}
 
-	private boolean isValidToken(String token) {
-		// Implement your token validation logic here
-		return true;
+	@Override
+	protected boolean shouldNotFilter(HttpServletRequest request) {
+		String path = request.getRequestURI();
+		return path.startsWith("/actuator");
+
 	}
 
 }

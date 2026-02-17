@@ -9,9 +9,11 @@ import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.redis.cache.RedisCacheConfiguration;
+import org.springframework.http.client.reactive.ReactorClientHttpConnector;
 import org.springframework.web.reactive.function.client.WebClient;
 
 import lombok.extern.slf4j.Slf4j;
+import reactor.netty.http.client.HttpClient;
 
 @Configuration
 @Slf4j
@@ -29,12 +31,13 @@ public class CustomConfig {
 	}
 
 	@Bean
-	WebClient webClient() {
-		return WebClient.builder().build();
+	public WebClient.Builder webClientBuilder() {
+		return WebClient.builder();
 	}
 
 	@Bean
 	RedisCacheConfiguration cacheConfiguration() {
+
 		return RedisCacheConfiguration.defaultCacheConfig().entryTtl(Duration.ofMinutes(10))
 				// Set the cache expiration time
 				.disableCachingNullValues(); // Disable caching of null values
@@ -42,6 +45,9 @@ public class CustomConfig {
 
 	@Bean
 	public WebClient authWebClient(WebClient.Builder builder, @Value("${auth.service.base-url}") String authBaseUrl) {
-		return builder.baseUrl(authBaseUrl).build();
+
+		HttpClient httpClient = HttpClient.create().responseTimeout(Duration.ofSeconds(2));
+
+		return builder.baseUrl(authBaseUrl).clientConnector(new ReactorClientHttpConnector(httpClient)).build();
 	}
 }

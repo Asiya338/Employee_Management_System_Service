@@ -25,9 +25,9 @@ public class SecureConfig {
 //	          .exceptionHandling(ex -> ex
 //	               .authenticationEntryPoint(authenticationEntryPoint)
 //	               .accessDeniedHandler(accessDeniedHandler))
-				.authorizeHttpRequests(
-						auth -> auth.requestMatchers("/public/**", "/actuator/**", "/api/v1/employees/**").permitAll()
-								.anyRequest().authenticated())
+//				.authorizeHttpRequests(auth -> auth.requestMatchers("/public/**", "/actuator/**").permitAll()
+//						.anyRequest().authenticated())
+				.authorizeHttpRequests(auth -> auth.anyRequest().permitAll())
 				.addFilterBefore(authTokenValidationFilter, UsernamePasswordAuthenticationFilter.class)
 				.sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
 
